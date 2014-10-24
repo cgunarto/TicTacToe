@@ -2,8 +2,8 @@
 //  ViewController.m
 //  TicTacToeChallenge
 //
-//  Created by Andrew Liu on 10/23/14.
-//  Copyright (c) 2014 Andrew Liu. All rights reserved.
+//  Created by Christina Gunarto on 10/23/14.
+//  Copyright (c) 2014 Christina Gunarto. All rights reserved.
 //
 
 #import "RootViewController.h"
@@ -23,6 +23,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *xButtonLabel;
 @property (weak, nonatomic) IBOutlet UILabel *oButtonLabel;
 @property (weak, nonatomic) IBOutlet UILabel *timerLabel;
+@property (weak, nonatomic) NSTimer *timer;
 @property CGPoint point;
 
 @end
@@ -324,6 +325,7 @@
 }
 
 
+//USE NSARRAY OR NSDICTIONARY FOR STATES1-9 TO HOLD VARIABLE OBJECTS?
 
 //    NSMutableArray *ticTacToeBoardValue = [[NSMutableArray alloc] init];
 //    ticTacToeBoardValue [0] = [self.labelOne.text isEqualToString:previousPlayer];
