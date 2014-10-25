@@ -7,7 +7,6 @@
 //
 
 #import "RootViewController.h"
-//ADD A #DEFINE FOR X AND O VALUES ??
 
 @interface RootViewController () <UIAlertViewDelegate>
 @property (weak, nonatomic) IBOutlet UILabel *labelOne;
@@ -34,8 +33,8 @@
 @implementation RootViewController
 //?? @synthesize counterLabel; this was in the example but is it necessary?
 
-int seconds; // ?? should this be here?
-int secondsLeft; //?? should this be here?
+int seconds; // ?? should this be here ?
+int secondsLeft; //?? should this be here ?
 
 - (void)viewDidLoad
 {
@@ -47,10 +46,12 @@ int secondsLeft; //?? should this be here?
     UIPanGestureRecognizer *xButtonPan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(xButtonHandler:)];
     [self.xButtonLabel addGestureRecognizer:xButtonPan];
     self.xButtonLabel.userInteractionEnabled = YES;
+    self.xButtonLabel.enabled = YES;
 
     UIPanGestureRecognizer *oButtonPan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(oButtonHandler:)];
     [self.oButtonLabel addGestureRecognizer:oButtonPan];
-    self.oButtonLabel.userInteractionEnabled = YES;
+    self.oButtonLabel.userInteractionEnabled = NO;
+    self.oButtonLabel.enabled = NO;
 }
 
 
@@ -59,7 +60,7 @@ int secondsLeft; //?? should this be here?
 -(void)countdownTimer
 {
 
-//    secondsLeft = seconds = 0;
+//?? secondsLeft = seconds = 0; this was here but seemed unecessary
     if([self.timer isValid])
     {
         [self.timer invalidate];
@@ -77,7 +78,6 @@ int secondsLeft; //?? should this be here?
     else{
         secondsLeft = 16;
         [self switchLabelToNextPlayer];
-
     }
 }
 
@@ -91,12 +91,20 @@ int secondsLeft; //?? should this be here?
     {
         self.whichPlayerLabel.text = @"O";
         self.whichPlayerLabel.textColor = [UIColor redColor];
+        self.xButtonLabel.userInteractionEnabled = NO;
+        self.xButtonLabel.enabled = NO;
+        self.oButtonLabel.userInteractionEnabled = YES;
+        self.oButtonLabel.enabled = YES;
     }
 
     else if ([currentPlayer isEqualToString: @"O"])
     {
         self.whichPlayerLabel.text = @"X";
         self.whichPlayerLabel.textColor = [UIColor blueColor];
+        self.xButtonLabel.userInteractionEnabled = YES;
+        self.xButtonLabel.enabled = YES;
+        self.oButtonLabel.userInteractionEnabled = NO;
+        self.oButtonLabel.enabled = NO;
     }
 }
 
@@ -202,8 +210,8 @@ int secondsLeft; //?? should this be here?
 
 - (void)oButtonHandler:(UIPanGestureRecognizer *)gesture
 {
-
     CGPoint point = [gesture locationInView:self.view];
+    UILabel *tappedLabel = [self findLabelUsingPoint:point];
 
     // where the finger touches, will be where the center of the frame will be
     self.oButtonLabel.center = point;
@@ -211,8 +219,9 @@ int secondsLeft; //?? should this be here?
     // when gesture ends, check if it's on a label, if that label is empty, set it to the whoseplayer label property
     if (gesture.state == UIGestureRecognizerStateEnded)
     {
+        //This deletes the flickering for some reason
         CGPoint endPoint = [gesture locationInView:self.view];
-        UILabel *tappedLabel = [self findLabelUsingPoint:endPoint];
+        tappedLabel = [self findLabelUsingPoint:endPoint];
 
         //if the label is empty then set it to whichPlayerLabel text and bgColor
 
@@ -341,6 +350,8 @@ int secondsLeft; //?? should this be here?
     }
 }
 
+#pragma mark MESSAGE TO PLAYER
+
 // defining the reset button for when Alert view is tapped
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
@@ -351,33 +362,52 @@ int secondsLeft; //?? should this be here?
 }
 
 
-//BUGS
-//When pan gesture ends, whoseplayer label changes even if player hasn't gone yet
+/*BUGS
+WHEN PLAYERS HIT A DRAW - nothing happens
+TIMER doesn't reset when game is reset
+*/
+
+/*CODE CLEAN UP
+Clean up whowins function
+Add a #define value for X or Y, is there a Magic String?
+
+Make this into its own method
+ tappedLabel.text = self.whichPlayerLabel.text;
+ tappedLabel.textColor = self.whichPlayerLabel.textColor;
+
+*/
+
+/*INTERFACE
+Nicer X O buttons
+
+ */
 
 
+/* Figuring out the AI stuff
 
-//USE NSARRAY OR NSDICTIONARY FOR STATES1-9 TO HOLD VARIABLE OBJECTS?
-//USE THIS TO CHECK BOARD OR DETERMINE WINNING NUMBER
+USE NSARRAY OR NSDICTIONARY FOR STATES1-9 TO HOLD VARIABLE OBJECTS?
+USE THIS TO CHECK BOARD OR DETERMINE WINNING NUMBER
 
-//- (BOOL) hasWinningCombination : (NSString *) player
-//{
-//
-//}
+- (BOOL) hasWinningCombination : (NSString *) player
+{
 
-    //check if player has winning combination of 123,456,789,147,258,369,159,357 then return TRUE
-    //if YES, return TRUE, else FALSE
+}
+
+    check if player has winning combination of 123,456,789,147,258,369,159,357 then return TRUE
+    if YES, return TRUE, else FALSE
 
 
-//    NSMutableArray *ticTacToeBoardValue = [[NSMutableArray alloc] init];
-//    ticTacToeBoardValue [0] = [self.labelOne.text isEqualToString:previousPlayer];
-//    ticTacToeBoardValue [1] = [self.labelOne.text isEqualToString:previousPlayer];
-//    ticTacToeBoardValue [2] = self.labelThree.text;
-//    ticTacToeBoardValue [3] = self.labelFour.text;
-//    ticTacToeBoardValue [4] = self.labelFive.text;
-//    ticTacToeBoardValue [5] = self.labelSix.text;
-//    ticTacToeBoardValue [6] = self.labelSeven.text;
-//    ticTacToeBoardValue [7] = self.labelEight.text;
-//    ticTacToeBoardValue [8] = self.labelNine.text;
+    NSMutableArray *ticTacToeBoardValue = [[NSMutableArray alloc] init];
+    ticTacToeBoardValue [0] = [self.labelOne.text isEqualToString:previousPlayer];
+    ticTacToeBoardValue [1] = [self.labelOne.text isEqualToString:previousPlayer];
+    ticTacToeBoardValue [2] = self.labelThree.text;
+    ticTacToeBoardValue [3] = self.labelFour.text;
+    ticTacToeBoardValue [4] = self.labelFive.text;
+    ticTacToeBoardValue [5] = self.labelSix.text;
+    ticTacToeBoardValue [6] = self.labelSeven.text;
+    ticTacToeBoardValue [7] = self.labelEight.text;
+    ticTacToeBoardValue [8] = self.labelNine.text;
 
+ */
 
 @end
