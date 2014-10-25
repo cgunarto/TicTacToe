@@ -7,6 +7,7 @@
 //
 
 #import "RootViewController.h"
+#define ksecondsForTimer 16
 
 @interface RootViewController () <UIAlertViewDelegate>
 @property (weak, nonatomic) IBOutlet UILabel *labelOne;
@@ -29,6 +30,10 @@
 
 @end
 
+//[self.timer invalidate]; // stop the timer -- this works
+//[self countdownTimer];
+
+
 
 @implementation RootViewController
 //?? @synthesize counterLabel; this was in the example but is it necessary?
@@ -39,7 +44,7 @@ int secondsLeft; //?? should this be here ?
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    secondsLeft = 16;
+    secondsLeft = ksecondsForTimer;
     [self countdownTimer];
 
     // Creating Pan Gesture recognizers for xButtonLabel and oButtonLabel
@@ -66,6 +71,8 @@ int secondsLeft; //?? should this be here ?
         [self.timer invalidate];
     }
     self.timer = [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(updateCounter:) userInfo:nil repeats:YES];
+
+
 }
 
 - (void)updateCounter:(NSTimer *)theTimer
@@ -76,7 +83,7 @@ int secondsLeft; //?? should this be here ?
         self.counterLabel.text = [NSString stringWithFormat:@":%02d", seconds];
     }
     else{
-        secondsLeft = 16;
+        secondsLeft = ksecondsForTimer;
         [self switchLabelToNextPlayer];
     }
 }
@@ -86,6 +93,10 @@ int secondsLeft; //?? should this be here ?
 
 - (void) switchLabelToNextPlayer
 {
+    [self.timer invalidate]; //TESTING - if the label switches then timer should stop
+    secondsLeft = ksecondsForTimer;
+    [self countdownTimer];
+
     NSString *currentPlayer = self.whichPlayerLabel.text;
     if ([currentPlayer isEqualToString: @"X"])
     {
@@ -106,6 +117,7 @@ int secondsLeft; //?? should this be here ?
         self.oButtonLabel.userInteractionEnabled = NO;
         self.oButtonLabel.enabled = NO;
     }
+
 }
 
 #pragma mark FIND LABEL USING POINT
@@ -181,6 +193,7 @@ int secondsLeft; //?? should this be here ?
 // Pan gesture recognizer was added on VDL instead of ctrl dragged
 // when the gesture is happening, these are being called, gesture state can be here
 //Current player drag X or O on empty box to change its value, if it has X or O then it won't change
+
 - (void)xButtonHandler:(UIPanGestureRecognizer *)gesture {
 
     CGPoint point = [gesture locationInView:self.view];
@@ -202,6 +215,7 @@ int secondsLeft; //?? should this be here ?
             tappedLabel.textColor = self.whichPlayerLabel.textColor;
             [self switchLabelToNextPlayer];
         }
+
     }
 
     [self checkWhoWins:[self whoWon]];
@@ -244,10 +258,14 @@ int secondsLeft; //?? should this be here ?
     {
         NSString *message= [NSString stringWithFormat:@"%@ won this round!", isWinner];
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"HOORAY!!!" message:message delegate:self cancelButtonTitle:nil otherButtonTitles:@"Play again", nil];
-
         //UIAlertController used instead of UIAlertView
         [alert show];
         
+    }
+
+    else
+    {
+
     }
     //!!!! ADD IF IT'S A DRAW
 }
@@ -271,6 +289,7 @@ int secondsLeft; //?? should this be here ?
         [self.labelThree.text isEqualToString:previousPlayer])
     {
         return self.labelOne.text;
+
     }
 
     //Checking middle row 456
@@ -323,10 +342,7 @@ int secondsLeft; //?? should this be here ?
     }
 
     else
-    {
-        // everything is filled and
-        //if it's a draw
-        //then return ?
+    {   // restart the timer if nobody won
         return nil;
     }
 
@@ -365,6 +381,7 @@ int secondsLeft; //?? should this be here ?
 /*BUGS
 WHEN PLAYERS HIT A DRAW - nothing happens
 TIMER doesn't reset when game is reset
+WHEN USER IS DRAGGING THE LETTER, TIMER DOESN'T MOVE
 */
 
 /*CODE CLEAN UP
@@ -379,6 +396,9 @@ Make this into its own method
 
 /*INTERFACE
 Nicer X O buttons
+Copy JSON view of the Tic Tac Toe and place that in the opening screen
+ 
+MAKE ANIMATION WITH TIMER and the 0.1f interval
 
  */
 
