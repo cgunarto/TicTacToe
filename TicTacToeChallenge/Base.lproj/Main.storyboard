@@ -160,8 +160,8 @@
                                     <segue destination="0Xb-HE-z8f" kind="modal" id="JV9-DL-7Nr"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4Er-WR-VPi">
-                                <rect key="frame" x="111" y="36" width="99" height="23"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="GO" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4Er-WR-VPi">
+                                <rect key="frame" x="111" y="35" width="99" height="24"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="99" id="MNr-9n-4jx"/>
                                     <constraint firstAttribute="height" constant="23" id="fa3-5b-e3f"/>
@@ -208,6 +208,7 @@
                         </connections>
                     </view>
                     <connections>
+                        <outlet property="counterLabel" destination="4Er-WR-VPi" id="mn7-LC-ecS"/>
                         <outlet property="labelEight" destination="uNH-gF-9he" id="1vg-ZR-1Ws"/>
                         <outlet property="labelFive" destination="QIT-0T-B5Q" id="60R-y9-Fhe"/>
                         <outlet property="labelFour" destination="KMM-WA-43J" id="TzH-8d-Z9y"/>
@@ -218,7 +219,6 @@
                         <outlet property="labelThree" destination="6cn-ds-iqk" id="c8V-zX-3GA"/>
                         <outlet property="labelTwo" destination="We5-fu-igl" id="FKH-Ha-o0N"/>
                         <outlet property="oButtonLabel" destination="Whu-1z-fae" id="wvb-zM-gOK"/>
-                        <outlet property="timerLabel" destination="4Er-WR-VPi" id="PH6-Ok-U5e"/>
                         <outlet property="whichPlayerLabel" destination="cKn-aA-kD6" id="zya-wo-FcE"/>
                         <outlet property="xButtonLabel" destination="ZeA-UD-QqD" id="Bjx-6g-PQZ"/>
                     </connections>

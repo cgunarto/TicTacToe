@@ -22,21 +22,28 @@
 @property (weak, nonatomic) IBOutlet UILabel *whichPlayerLabel;
 @property (weak, nonatomic) IBOutlet UILabel *xButtonLabel;
 @property (weak, nonatomic) IBOutlet UILabel *oButtonLabel;
-@property (weak, nonatomic) IBOutlet UILabel *timerLabel;
-@property (weak, nonatomic) NSTimer *timer;
 @property CGPoint point;
+@property (retain, nonatomic) IBOutlet UILabel *counterLabel;
+//?? look up what is retain ??
+@property NSTimer *timer;
+
 
 @end
 
 
 @implementation RootViewController
+@synthesize counterLabel;
+
+int seconds; // ?? should this be here?
+int secondsLeft; //?? should this be here?
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.whichPlayerLabel.text = @"X";
-    self.whichPlayerLabel.textColor = [UIColor blueColor];
+    secondsLeft = 16;
+    [self countdownTimer];
 
+    // Creating Pan Gesture recognizers for xButtonLabel and oButtonLabel
     UIPanGestureRecognizer *xButtonPan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(xButtonHandler:)];
     [self.xButtonLabel addGestureRecognizer:xButtonPan];
     self.xButtonLabel.userInteractionEnabled = YES;
@@ -45,6 +52,54 @@
     [self.oButtonLabel addGestureRecognizer:oButtonPan];
     self.oButtonLabel.userInteractionEnabled = YES;
 }
+
+
+#pragma mark TIMER AND COUNTER METHOD
+
+-(void)countdownTimer{
+
+//    secondsLeft = seconds = 0;
+    if([self.timer isValid])
+    {
+        [self.timer invalidate];
+    }
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(updateCounter:) userInfo:nil repeats:YES];
+}
+
+- (void)updateCounter:(NSTimer *)theTimer
+{
+    if(secondsLeft > 0 ){
+        secondsLeft -- ;
+        seconds = (secondsLeft %3600) % 60;
+        self.counterLabel.text = [NSString stringWithFormat:@":%02d", seconds];
+    }
+    else{
+        secondsLeft = 16;
+        [self switchLabelToNextPlayer];
+
+    }
+}
+
+
+#pragma mark SWITCHING WHOSE PLAYER LABEL
+
+- (void) switchLabelToNextPlayer
+{
+    NSString *currentPlayer = self.whichPlayerLabel.text;
+    if ([currentPlayer isEqualToString: @"X"])
+    {
+        self.whichPlayerLabel.text = @"O";
+        self.whichPlayerLabel.textColor = [UIColor redColor];
+    }
+
+    else if ([currentPlayer isEqualToString: @"O"])
+    {
+        self.whichPlayerLabel.text = @"X";
+        self.whichPlayerLabel.textColor = [UIColor blueColor];
+    }
+}
+
+#pragma mark FIND LABEL USING POINT
 
 //This function determines which label is tapped based on the point, returns that Label
 - (UILabel *) findLabelUsingPoint: (CGPoint)point
@@ -89,58 +144,99 @@
 
 }
 
-//on label tapped, get the label
-//and then change that label's value'
-//and then change the user interaction to be disabled
 
+#pragma mark GESTURE: TAP ACTIONS
+
+//Created by ctrl and dragging instead of code
+//Current player to tap on empty box to change its value, if it has X or O then it won't change
 - (IBAction)onLabelTapped:(UITapGestureRecognizer *)gesture
 {
     self.point = [gesture locationInView:self.view];
 
     UILabel *tappedLabel = [self findLabelUsingPoint:self.point];
 
-
-    tappedLabel.text = self.whichPlayerLabel.text;
-    tappedLabel.textColor = self.whichPlayerLabel.textColor;
-
-    if ([tappedLabel.text  isEqual: @"X"])
+    if (![tappedLabel.text isEqual:@"X"] && ![tappedLabel.text isEqual:@"O"])
     {
-        self.whichPlayerLabel.text = @"O";
-        self.whichPlayerLabel.textColor = [UIColor redColor];
+        tappedLabel.text = self.whichPlayerLabel.text;
+        tappedLabel.textColor = self.whichPlayerLabel.textColor;
+        [self switchLabelToNextPlayer];
     }
-    else
-    {
-        self.whichPlayerLabel.text = @"X";
-        self.whichPlayerLabel.textColor = [UIColor blueColor];
-    }
-
     [self checkWhoWins:[self whoWon]];
 }
 
+#pragma mark GESTURE: PAN ACTIONS
+
+// Pan gesture recognizer was added on VDL instead of ctrl dragged
+// when the gesture is happening, these are being called, gesture state can be here
+//Current player drag X or O on empty box to change its value, if it has X or O then it won't change
+- (void)xButtonHandler:(UIPanGestureRecognizer *)gesture {
+
+    CGPoint point = [gesture locationInView:self.view];
+
+    // where the finger touches, will be where the center of the frame will be
+    self.xButtonLabel.center = point;
+
+    // when gesture ends, check if it's on a label, if that label is empty, set it to the whoseplayer label property
+    if (gesture.state == UIGestureRecognizerStateEnded)
+    {
+        CGPoint endPoint = [gesture locationInView:self.view];
+        UILabel *tappedLabel = [self findLabelUsingPoint:endPoint];
+
+        //if the label is empty then set it to whichPlayerLabel text and bgColor
+
+        if (![tappedLabel.text isEqual:@"X"] && ![tappedLabel.text isEqual:@"O"])
+        {
+            tappedLabel.text = self.whichPlayerLabel.text;
+            tappedLabel.textColor = self.whichPlayerLabel.textColor;
+            [self switchLabelToNextPlayer];
+        }
+    }
+
+    [self checkWhoWins:[self whoWon]];
+
+}
+
+- (void)oButtonHandler:(UIPanGestureRecognizer *)gesture
+{
+
+    CGPoint point = [gesture locationInView:self.view];
+
+    // where the finger touches, will be where the center of the frame will be
+    self.oButtonLabel.center = point;
+
+    // when gesture ends, check if it's on a label, if that label is empty, set it to the whoseplayer label property
+    if (gesture.state == UIGestureRecognizerStateEnded)
+    {
+        CGPoint endPoint = [gesture locationInView:self.view];
+        UILabel *tappedLabel = [self findLabelUsingPoint:endPoint];
+
+        //if the label is empty then set it to whichPlayerLabel text and bgColor
+
+        if (![tappedLabel.text isEqual:@"X"] && ![tappedLabel.text isEqual:@"O"])
+        {
+            tappedLabel.text = self.whichPlayerLabel.text;
+            tappedLabel.textColor = self.whichPlayerLabel.textColor;
+            [self switchLabelToNextPlayer];
+        }
+    }
+    [self checkWhoWins:[self whoWon]];
+    
+}
+
+#pragma mark GAME : CHECKING WHO WINS
 // If someone won, then proclaim victory with an alert, button should start new game
 - (void) checkWhoWins : (NSString *)isWinner
 {
     if (isWinner != nil)
     {
         NSString *message= [NSString stringWithFormat:@"%@ won this round!", isWinner];
-
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"HOORAY!!!" message:message delegate:self cancelButtonTitle:nil otherButtonTitles:@"Play again", nil];
 
         //UIAlertController used instead of UIAlertView
-
         [alert show];
         
     }
     //!!!! ADD IF IT'S A DRAW
-}
-
-// defining the reset button for when Alert view is tapped
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (buttonIndex == 0)
-    {
-        [self resetGame:YES];
-    }
 }
 
 - (NSString *)whoWon
@@ -236,96 +332,37 @@
         self.labelSeven.text = nil;
         self.labelEight.text = nil;
         self.labelNine.text = nil;
+        self.whichPlayerLabel.text = @"X";
+        self.whichPlayerLabel.textColor = [UIColor blueColor];
     }
 }
 
-// when the gesture is happening, these are being called
-//gesture state can be here
-- (void)xButtonHandler:(UIPanGestureRecognizer *)gesture {
-
-    CGPoint point = [gesture locationInView:self.view];
-
-    // where the finger touches, will be where the center of the frame will be
-    self.xButtonLabel.center = point;
-
-    // when gesture ends, check if it's on a label, if that label is empty, set it to the whoseplayer label property
-    if (gesture.state == UIGestureRecognizerStateEnded)
-    {
-        CGPoint endPoint = [gesture locationInView:self.view];
-        UILabel *tappedLabel = [self findLabelUsingPoint:endPoint];
-
-        //if the label is empty then set it to whichPlayerLabel text and bgColor
-
-        if (![tappedLabel.text isEqual:@"X"] && ![tappedLabel.text isEqual:@"O"])
-        {
-            tappedLabel.text = self.whichPlayerLabel.text;
-            tappedLabel.textColor = self.whichPlayerLabel.textColor;
-            self.whichPlayerLabel.text = @"O";
-            self.whichPlayerLabel.textColor = [UIColor redColor];
-        }
-
-        else if([tappedLabel.text isEqual: @"X"])
-        {
-            self.whichPlayerLabel.text = @"O";
-            self.whichPlayerLabel.textColor = [UIColor redColor];
-        }
-
-
-        else if([tappedLabel.text isEqual: @"0"])
-        {
-            self.whichPlayerLabel.text = @"X";
-            self.whichPlayerLabel.textColor = [UIColor blueColor];
-        }
-    }
-
-    [self checkWhoWins:[self whoWon]];
-
-}
-
-- (void)oButtonHandler:(UIPanGestureRecognizer *)gesture
+// defining the reset button for when Alert view is tapped
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-
-    CGPoint point = [gesture locationInView:self.view];
-
-    // where the finger touches, will be where the center of the frame will be
-    self.oButtonLabel.center = point;
-
-    // when gesture ends, check if it's on a label, if that label is empty, set it to the whoseplayer label property
-    if (gesture.state == UIGestureRecognizerStateEnded)
+    if (buttonIndex == 0)
     {
-        CGPoint endPoint = [gesture locationInView:self.view];
-        UILabel *tappedLabel = [self findLabelUsingPoint:endPoint];
-
-        //if the label is empty then set it to whichPlayerLabel text and bgColor
-
-        if (![tappedLabel.text isEqual:@"X"] && ![tappedLabel.text isEqual:@"O"])
-        {
-            tappedLabel.text = self.whichPlayerLabel.text;
-            tappedLabel.textColor = self.whichPlayerLabel.textColor;
-            self.whichPlayerLabel.text = @"X";
-            self.whichPlayerLabel.textColor = [UIColor blueColor];
-        }
-
-        else if([tappedLabel.text isEqual: @"X"])
-        {
-            self.whichPlayerLabel.text = @"O";
-            self.whichPlayerLabel.textColor = [UIColor redColor];
-        }
-
-
-        else if([tappedLabel.text isEqual: @"0"])
-        {
-            self.whichPlayerLabel.text = @"X";
-            self.whichPlayerLabel.textColor = [UIColor blueColor];
-        }
+        [self resetGame:YES];
     }
-    
-    [self checkWhoWins:[self whoWon]];
-
 }
+
+
+//BUGS
+//Tapping outside of label still changes the whoseplayer label text
+
 
 
 //USE NSARRAY OR NSDICTIONARY FOR STATES1-9 TO HOLD VARIABLE OBJECTS?
+//USE THIS TO CHECK BOARD OR DETERMINE WINNING NUMBER
+
+//- (BOOL) hasWinningCombination : (NSString *) player
+//{
+//
+//}
+
+    //check if player has winning combination of 123,456,789,147,258,369,159,357 then return TRUE
+    //if YES, return TRUE, else FALSE
+
 
 //    NSMutableArray *ticTacToeBoardValue = [[NSMutableArray alloc] init];
 //    ticTacToeBoardValue [0] = [self.labelOne.text isEqualToString:previousPlayer];
