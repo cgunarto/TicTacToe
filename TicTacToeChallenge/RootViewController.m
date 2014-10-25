@@ -23,7 +23,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *xButtonLabel;
 @property (weak, nonatomic) IBOutlet UILabel *oButtonLabel;
 @property CGPoint point;
-@property (retain, nonatomic) IBOutlet UILabel *counterLabel;
+@property (weak, nonatomic) IBOutlet UILabel *counterLabel;
 //?? look up what is retain ??
 @property NSTimer *timer;
 
@@ -32,7 +32,7 @@
 
 
 @implementation RootViewController
-@synthesize counterLabel;
+//?? @synthesize counterLabel; this was in the example but is it necessary?
 
 int seconds; // ?? should this be here?
 int secondsLeft; //?? should this be here?
@@ -56,7 +56,8 @@ int secondsLeft; //?? should this be here?
 
 #pragma mark TIMER AND COUNTER METHOD
 
--(void)countdownTimer{
+-(void)countdownTimer
+{
 
 //    secondsLeft = seconds = 0;
     if([self.timer isValid])
@@ -155,13 +156,16 @@ int secondsLeft; //?? should this be here?
 
     UILabel *tappedLabel = [self findLabelUsingPoint:self.point];
 
-    if (![tappedLabel.text isEqual:@"X"] && ![tappedLabel.text isEqual:@"O"])
+    if (tappedLabel) //confirms if tap gesture is within a label
     {
+        if (![tappedLabel.text isEqual:@"X"] && ![tappedLabel.text isEqual:@"O"])
+        {
         tappedLabel.text = self.whichPlayerLabel.text;
         tappedLabel.textColor = self.whichPlayerLabel.textColor;
         [self switchLabelToNextPlayer];
+        }
     }
-    [self checkWhoWins:[self whoWon]];
+        [self checkWhoWins:[self whoWon]];
 }
 
 #pragma mark GESTURE: PAN ACTIONS
@@ -348,7 +352,7 @@ int secondsLeft; //?? should this be here?
 
 
 //BUGS
-//Tapping outside of label still changes the whoseplayer label text
+//When pan gesture ends, whoseplayer label changes even if player hasn't gone yet
 
 
 
