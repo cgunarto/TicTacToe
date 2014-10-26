@@ -44,7 +44,6 @@
 
 int seconds; // ?? should this be here ?
 int secondsLeft; //?? should this be here ?
-int gameState;
 
 - (void)viewDidLoad
 {
@@ -61,7 +60,6 @@ int gameState;
     [self disableButtonLabel:self.oButtonLabel];
 
      self.cornerLabelArray= [NSArray arrayWithObjects:self.labelOne, self.labelThree, self.labelSeven, self.labelNine, nil];
-     gameState = 0;
 }
 
 # pragma mark START GAME BUTTON AND INITIAL BUTTON STATE
@@ -293,7 +291,6 @@ int gameState;
         tappedLabel = [self findLabelUsingPoint:endPoint];
 
         //if the label is empty then set it to whichPlayerLabel text and bgColor
-
         if (![tappedLabel.text isEqual:@"X"] && ![tappedLabel.text isEqual:@"O"])
         {
             tappedLabel.text = self.whichPlayerLabel.text;
@@ -347,85 +344,142 @@ int gameState;
 
     //if all the board is filled then return this below
 
-//    NSMutableArray *boardState = [[NSMutableArray alloc] initWithObjects:self.labelOne.text, self.labelTwo.text, self.labelThree.text, self.labelFour.text, self.labelFive.text, self.labelSix.text, self.labelSeven.text, self.labelEight.text, self.labelNine.text, nil];
-//
-//    for (int i = 0; i < 9; i++)
-//    {
-//        if ([boardState[i] isEqual: @"X"] || [boardState[i]isEqual:@"O"] )
-//        {
-//            gameState = gameState + 1;
-//            NSLog(@"one label filled");
-//        }
-//    }
-//
-//    if (gameState == 9)
-//    {
-//        NSString *message= [NSString stringWithFormat:@"%@ won this round!", isWinner];
-//        UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"IT'S A DRAW!!!" message:message delegate:self cancelButtonTitle:nil otherButtonTitles:@"Play again", nil];
-//        //UIAlertController used instead of UIAlertView
-//        [alert show];
-//    }
+    int gameState = 0;
+    NSMutableArray *boardState = [[NSMutableArray alloc] initWithObjects:self.labelOne.text, self.labelTwo.text, self.labelThree.text, self.labelFour.text, self.labelFive.text, self.labelSix.text, self.labelSeven.text, self.labelEight.text, self.labelNine.text, nil];
 
-    //Checking top row 123
-    if ([self.labelOne.text isEqualToString:previousPlayer] && [self.labelTwo.text isEqualToString:previousPlayer] &&
-        [self.labelThree.text isEqualToString:previousPlayer])
+    for (int i = 0; i < 9; i++)
     {
-        return self.labelOne.text;
-
+        if ([boardState[i] isEqual: @"X"] || [boardState[i]isEqual:@"O"] )
+        {
+            gameState = gameState + 1;
+        }
     }
 
-    //Checking middle row 456
-    else if ([self.labelFour.text isEqualToString:previousPlayer] && [self.labelFive.text isEqualToString:previousPlayer] &&
-        [self.labelSix.text isEqualToString:previousPlayer])
+    if (gameState < 9)
     {
-        return self.labelFour.text;
-    }
+        if ([self.labelOne.text isEqualToString:previousPlayer] && [self.labelTwo.text isEqualToString:previousPlayer] &&
+            [self.labelThree.text isEqualToString:previousPlayer])
+        {
+            return self.labelOne.text;
 
-    //Checking bottom row 789
-    else if ([self.labelSeven.text isEqualToString:previousPlayer] && [self.labelEight.text isEqualToString:previousPlayer] &&
-        [self.labelNine.text isEqualToString:previousPlayer])
-    {
-        return self.labelSeven.text;
-    }
+        }
 
-    //Checking left column 147
-    else if ([self.labelOne.text isEqualToString:previousPlayer] && [self.labelFour.text isEqualToString:previousPlayer] &&
-        [self.labelSeven.text isEqualToString:previousPlayer])
-    {
-        return self.labelOne.text;
-    }
+        //Checking middle row 456
+        else if ([self.labelFour.text isEqualToString:previousPlayer] && [self.labelFive.text isEqualToString:previousPlayer] &&
+            [self.labelSix.text isEqualToString:previousPlayer])
+        {
+            return self.labelFour.text;
+        }
 
-    //Checking middle column 258
-    else if ([self.labelTwo.text isEqualToString:previousPlayer] && [self.labelFive.text isEqualToString:previousPlayer] &&
-             [self.labelEight.text isEqualToString:previousPlayer])
-    {
-        return self.labelTwo.text;
-    }
+        //Checking bottom row 789
+        else if ([self.labelSeven.text isEqualToString:previousPlayer] && [self.labelEight.text isEqualToString:previousPlayer] &&
+            [self.labelNine.text isEqualToString:previousPlayer])
+        {
+            return self.labelSeven.text;
+        }
 
-    //Checking right column 369
-    else if ([self.labelThree.text isEqualToString:previousPlayer] && [self.labelSix.text isEqualToString:previousPlayer] &&
-             [self.labelNine.text isEqualToString:previousPlayer])
-    {
-        return self.labelThree.text;
-    }
+        //Checking left column 147
+        else if ([self.labelOne.text isEqualToString:previousPlayer] && [self.labelFour.text isEqualToString:previousPlayer] &&
+            [self.labelSeven.text isEqualToString:previousPlayer])
+        {
+            return self.labelOne.text;
+        }
 
-    //Checking diagonal from top left to bottom right 159
-    else if ([self.labelOne.text isEqualToString:previousPlayer] && [self.labelFive.text isEqualToString:previousPlayer] &&
-             [self.labelNine.text isEqualToString:previousPlayer])
-    {
-        return self.labelOne.text;
-    }
+        //Checking middle column 258
+        else if ([self.labelTwo.text isEqualToString:previousPlayer] && [self.labelFive.text isEqualToString:previousPlayer] &&
+                 [self.labelEight.text isEqualToString:previousPlayer])
+        {
+            return self.labelTwo.text;
+        }
 
-    //Checking diagonal from top left to bottom right 357
-    else if ([self.labelThree.text isEqualToString:previousPlayer] && [self.labelFive.text isEqualToString:previousPlayer] &&
-             [self.labelSeven.text isEqualToString:previousPlayer])
-    {
-        return self.labelThree.text;
-    }
+        //Checking right column 369
+        else if ([self.labelThree.text isEqualToString:previousPlayer] && [self.labelSix.text isEqualToString:previousPlayer] &&
+                 [self.labelNine.text isEqualToString:previousPlayer])
+        {
+            return self.labelThree.text;
+        }
 
-   else
+        //Checking diagonal from top left to bottom right 159
+        else if ([self.labelOne.text isEqualToString:previousPlayer] && [self.labelFive.text isEqualToString:previousPlayer] &&
+                 [self.labelNine.text isEqualToString:previousPlayer])
+        {
+            return self.labelOne.text;
+        }
+
+        //Checking diagonal from top left to bottom right 357
+        else if ([self.labelThree.text isEqualToString:previousPlayer] && [self.labelFive.text isEqualToString:previousPlayer] &&
+                 [self.labelSeven.text isEqualToString:previousPlayer])
+        {
+            return self.labelThree.text;
+        }
+
+       else
+        {
+          return nil;
+        }
+    }
+    else
     {
-      return nil;
+        if ([self.labelOne.text isEqualToString:previousPlayer] && [self.labelTwo.text isEqualToString:previousPlayer] &&
+            [self.labelThree.text isEqualToString:previousPlayer])
+        {
+            return self.labelOne.text;
+
+        }
+
+        //Checking middle row 456
+        else if ([self.labelFour.text isEqualToString:previousPlayer] && [self.labelFive.text isEqualToString:previousPlayer] &&
+                 [self.labelSix.text isEqualToString:previousPlayer])
+        {
+            return self.labelFour.text;
+        }
+
+        //Checking bottom row 789
+        else if ([self.labelSeven.text isEqualToString:previousPlayer] && [self.labelEight.text isEqualToString:previousPlayer] &&
+                 [self.labelNine.text isEqualToString:previousPlayer])
+        {
+            return self.labelSeven.text;
+        }
+
+        //Checking left column 147
+        else if ([self.labelOne.text isEqualToString:previousPlayer] && [self.labelFour.text isEqualToString:previousPlayer] &&
+                 [self.labelSeven.text isEqualToString:previousPlayer])
+        {
+            return self.labelOne.text;
+        }
+
+        //Checking middle column 258
+        else if ([self.labelTwo.text isEqualToString:previousPlayer] && [self.labelFive.text isEqualToString:previousPlayer] &&
+                 [self.labelEight.text isEqualToString:previousPlayer])
+        {
+            return self.labelTwo.text;
+        }
+
+        //Checking right column 369
+        else if ([self.labelThree.text isEqualToString:previousPlayer] && [self.labelSix.text isEqualToString:previousPlayer] &&
+                 [self.labelNine.text isEqualToString:previousPlayer])
+        {
+            return self.labelThree.text;
+        }
+
+        //Checking diagonal from top left to bottom right 159
+        else if ([self.labelOne.text isEqualToString:previousPlayer] && [self.labelFive.text isEqualToString:previousPlayer] &&
+                 [self.labelNine.text isEqualToString:previousPlayer])
+        {
+            return self.labelOne.text;
+        }
+
+        //Checking diagonal from top left to bottom right 357
+        else if ([self.labelThree.text isEqualToString:previousPlayer] && [self.labelFive.text isEqualToString:previousPlayer] &&
+                 [self.labelSeven.text isEqualToString:previousPlayer])
+        {
+            return self.labelThree.text;
+        }
+        
+        else
+        {
+            return @"draw";
+        }
     }
 
 }
@@ -456,7 +510,6 @@ int gameState;
         self.labelNine.text = nil;
         self.whichPlayerLabel.text = @"X";
         self.whichPlayerLabel.textColor = [UIColor blueColor];
-        gameState = 0;
         [self.timer invalidate];
         [self startGame];
 
