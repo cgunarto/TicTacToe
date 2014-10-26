@@ -23,17 +23,18 @@
 @property (weak, nonatomic) IBOutlet UILabel *xButtonLabel;
 @property (weak, nonatomic) IBOutlet UILabel *oButtonLabel;
 @property CGPoint point;
+
 @property (weak, nonatomic) IBOutlet UILabel *counterLabel;
-//?? look up what is retain ??
 @property NSTimer *timer;
 
+@property (weak, nonatomic) IBOutlet UIButton *startButton;
+
+@property (weak, nonatomic) NSMutableArray *currentBoardState;
 
 @end
 
 //[self.timer invalidate]; // stop the timer -- this works
 //[self countdownTimer];
-
-
 
 @implementation RootViewController
 //?? @synthesize counterLabel; this was in the example but is it necessary?
@@ -44,19 +45,43 @@ int secondsLeft; //?? should this be here ?
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    secondsLeft = ksecondsForTimer;
-    [self countdownTimer];
 
     // Creating Pan Gesture recognizers for xButtonLabel and oButtonLabel
     UIPanGestureRecognizer *xButtonPan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(xButtonHandler:)];
     [self.xButtonLabel addGestureRecognizer:xButtonPan];
-    self.xButtonLabel.userInteractionEnabled = YES;
-    self.xButtonLabel.enabled = YES;
+    [self disableButtonLabel:self.xButtonLabel];
+
 
     UIPanGestureRecognizer *oButtonPan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(oButtonHandler:)];
     [self.oButtonLabel addGestureRecognizer:oButtonPan];
-    self.oButtonLabel.userInteractionEnabled = NO;
-    self.oButtonLabel.enabled = NO;
+    [self disableButtonLabel:self.oButtonLabel];
+}
+
+# pragma mark START GAME BUTTON AND INITIAL BUTTON STATE
+- (IBAction)onStartButtonPressed:(id)sender
+{
+    [self startGame];
+}
+
+- (void) startGame
+{
+    secondsLeft = ksecondsForTimer;
+    [self countdownTimer];
+    [self enableButtonLabel:self.xButtonLabel];
+    [self disableButtonLabel:self.oButtonLabel];
+    self.startButton.enabled = NO;
+}
+
+- (void)disableButtonLabel: (UILabel *)labelButton
+{
+    labelButton.userInteractionEnabled = NO;
+    labelButton.enabled = NO;
+}
+
+- (void)enableButtonLabel: (UILabel *)labelButton
+{
+    labelButton.userInteractionEnabled = YES;
+    labelButton.enabled = YES;
 }
 
 
@@ -102,20 +127,16 @@ int secondsLeft; //?? should this be here ?
     {
         self.whichPlayerLabel.text = @"O";
         self.whichPlayerLabel.textColor = [UIColor redColor];
-        self.xButtonLabel.userInteractionEnabled = NO;
-        self.xButtonLabel.enabled = NO;
-        self.oButtonLabel.userInteractionEnabled = YES;
-        self.oButtonLabel.enabled = YES;
+        [self disableButtonLabel:self.xButtonLabel];
+        [self enableButtonLabel:self.oButtonLabel];
     }
 
     else if ([currentPlayer isEqualToString: @"O"])
     {
         self.whichPlayerLabel.text = @"X";
         self.whichPlayerLabel.textColor = [UIColor blueColor];
-        self.xButtonLabel.userInteractionEnabled = YES;
-        self.xButtonLabel.enabled = YES;
-        self.oButtonLabel.userInteractionEnabled = NO;
-        self.oButtonLabel.enabled = NO;
+        [self disableButtonLabel:self.oButtonLabel];
+        [self enableButtonLabel:self.xButtonLabel];
     }
 
 }
@@ -265,7 +286,6 @@ int secondsLeft; //?? should this be here ?
 
     else
     {
-
     }
     //!!!! ADD IF IT'S A DRAW
 }
@@ -341,11 +361,22 @@ int secondsLeft; //?? should this be here ?
         return self.labelThree.text;
     }
 
-    else
-    {   // restart the timer if nobody won
-        return nil;
+   else
+    {
+      return nil;
     }
 
+}
+
+#pragma mark ALERT VIEW AND RESET GAME
+
+// defining the reset button for when Alert view is tapped
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 0)
+    {
+        [self resetGame:YES];
+    }
 }
 
 - (void) resetGame: (BOOL) reset
@@ -363,22 +394,14 @@ int secondsLeft; //?? should this be here ?
         self.labelNine.text = nil;
         self.whichPlayerLabel.text = @"X";
         self.whichPlayerLabel.textColor = [UIColor blueColor];
-    }
-}
-
-#pragma mark MESSAGE TO PLAYER
-
-// defining the reset button for when Alert view is tapped
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (buttonIndex == 0)
-    {
-        [self resetGame:YES];
+        [self.timer invalidate];
+        [self startGame];
     }
 }
 
 
 /*BUGS
+AlertView is deprecated change it to something else
 WHEN PLAYERS HIT A DRAW - nothing happens
 TIMER doesn't reset when game is reset
 WHEN USER IS DRAGGING THE LETTER, TIMER DOESN'T MOVE
@@ -415,12 +438,12 @@ USE THIS TO CHECK BOARD OR DETERMINE WINNING NUMBER
 
     check if player has winning combination of 123,456,789,147,258,369,159,357 then return TRUE
     if YES, return TRUE, else FALSE
-
+    Check gameState:
 
     NSMutableArray *ticTacToeBoardValue = [[NSMutableArray alloc] init];
     ticTacToeBoardValue [0] = [self.labelOne.text isEqualToString:previousPlayer];
-    ticTacToeBoardValue [1] = [self.labelOne.text isEqualToString:previousPlayer];
-    ticTacToeBoardValue [2] = self.labelThree.text;
+    ticTacToeBoardValue [1] = [self.labelTwo.text isEqualToString:previousPlayer];
+    ticTacToeBoardValue [2] = self.labelThree.text is EqualToString;
     ticTacToeBoardValue [3] = self.labelFour.text;
     ticTacToeBoardValue [4] = self.labelFive.text;
     ticTacToeBoardValue [5] = self.labelSix.text;
