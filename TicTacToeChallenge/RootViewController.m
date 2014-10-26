@@ -150,10 +150,24 @@ int secondsLeft; //?? should this be here ?
     else
     {
         NSLog(@"Switch label knows that we're playing against a computer");
-        self.whichPlayerLabel.text = @"O";
-        self.whichPlayerLabel.textColor = [UIColor redColor];
-        [self disableButtonLabel:self.xButtonLabel];
-        [self enableButtonLabel:self.oButtonLabel];
+
+        NSString *currentPlayer = self.whichPlayerLabel.text;
+
+        if ([currentPlayer isEqualToString: @"X"])
+        {
+            self.whichPlayerLabel.text = @"O";
+            self.whichPlayerLabel.textColor = [UIColor redColor];
+            [self disableButtonLabel:self.xButtonLabel];
+            [self enableButtonLabel:self.oButtonLabel];
+        }
+
+        else if ([currentPlayer isEqualToString: @"O"])
+        {
+            self.whichPlayerLabel.text = @"X";
+            self.whichPlayerLabel.textColor = [UIColor blueColor];
+            [self disableButtonLabel:self.oButtonLabel];
+            [self enableButtonLabel:self.xButtonLabel];
+        }
     }
 
 
@@ -428,6 +442,7 @@ int secondsLeft; //?? should this be here ?
 
 - (void)computerMakeMove
 {
+    // computer needs to check if board is full or empty
     int randomCorner = arc4random_uniform(4);
     UILabel *labelChosen = self.cornerLabelArray[randomCorner];
 
@@ -442,8 +457,7 @@ int secondsLeft; //?? should this be here ?
 
 - (void)playerMakeMove
 {
-    //when player makes a move, it's calling the tap label actions
-    //tap label action needs to know the right player to switch to (eg when computer is playing or when human is playing)
+    NSLog(@"player next move is called!");
 }
 
 
