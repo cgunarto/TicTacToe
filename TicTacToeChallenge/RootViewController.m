@@ -426,17 +426,18 @@ int secondsLeft; //?? should this be here ?
     {
         labelChosen.text = @"X";
         labelChosen.textColor = [UIColor blueColor];
-//        [self playerMakeMove];
+        [self switchLabelToNextPlayer];
+        [self playerMakeMove];
     }
 }
 
-//- (void)playerMakeMove
-//{
-//    if ([self.whichPlayerLabel.text isEqual:@"X"])
-//    {
-//        [self computerMakeMove];
-//    }
-//}
+- (void)playerMakeMove
+{
+    if ([self.whichPlayerLabel.text isEqual:@"X"])
+    {
+        [self computerMakeMove];
+    }
+}
 
 //- (void) switchToComputer
 //{
