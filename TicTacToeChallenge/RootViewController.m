@@ -44,6 +44,7 @@
 
 int seconds; // ?? should this be here ?
 int secondsLeft; //?? should this be here ?
+int gameState;
 
 - (void)viewDidLoad
 {
@@ -60,6 +61,7 @@ int secondsLeft; //?? should this be here ?
     [self disableButtonLabel:self.oButtonLabel];
 
      self.cornerLabelArray= [NSArray arrayWithObjects:self.labelOne, self.labelThree, self.labelSeven, self.labelNine, nil];
+     gameState = 0;
 }
 
 # pragma mark START GAME BUTTON AND INITIAL BUTTON STATE
@@ -307,7 +309,7 @@ int secondsLeft; //?? should this be here ?
 // If someone won, then proclaim victory with an alert, button should start new game
 - (void) checkWhoWins : (NSString *)isWinner
 {
-    if (isWinner != nil)
+    if ([isWinner isEqual:@"X"]||[isWinner isEqual:@"O"])
     {
         NSString *message= [NSString stringWithFormat:@"%@ won this round!", isWinner];
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"HOORAY!!!" message:message delegate:self cancelButtonTitle:nil otherButtonTitles:@"Play again", nil];
@@ -316,10 +318,14 @@ int secondsLeft; //?? should this be here ?
         
     }
 
-    else
+    else if ([isWinner isEqual:@"draw"])
     {
+        NSString *message= [NSString stringWithFormat:@"%@ won this round!", isWinner];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"IT'S A DRAW!!!" message:message delegate:self cancelButtonTitle:nil otherButtonTitles:@"Play again", nil];
+        //UIAlertController used instead of UIAlertView
+        [alert show];
     }
-    //!!!! ADD IF IT'S A DRAW
+
 }
 
 - (NSString *)whoWon
@@ -335,6 +341,30 @@ int secondsLeft; //?? should this be here ?
     {
         previousPlayer = @"X";
     }
+
+    //if board is not all full, check to see who is the winner
+    //if board is all full, then nobody wins, return nil
+
+    //if all the board is filled then return this below
+
+//    NSMutableArray *boardState = [[NSMutableArray alloc] initWithObjects:self.labelOne.text, self.labelTwo.text, self.labelThree.text, self.labelFour.text, self.labelFive.text, self.labelSix.text, self.labelSeven.text, self.labelEight.text, self.labelNine.text, nil];
+//
+//    for (int i = 0; i < 9; i++)
+//    {
+//        if ([boardState[i] isEqual: @"X"] || [boardState[i]isEqual:@"O"] )
+//        {
+//            gameState = gameState + 1;
+//            NSLog(@"one label filled");
+//        }
+//    }
+//
+//    if (gameState == 9)
+//    {
+//        NSString *message= [NSString stringWithFormat:@"%@ won this round!", isWinner];
+//        UIAlertView *alert = [[UIAlertView alloc] initWithTitle: @"IT'S A DRAW!!!" message:message delegate:self cancelButtonTitle:nil otherButtonTitles:@"Play again", nil];
+//        //UIAlertController used instead of UIAlertView
+//        [alert show];
+//    }
 
     //Checking top row 123
     if ([self.labelOne.text isEqualToString:previousPlayer] && [self.labelTwo.text isEqualToString:previousPlayer] &&
@@ -426,8 +456,10 @@ int secondsLeft; //?? should this be here ?
         self.labelNine.text = nil;
         self.whichPlayerLabel.text = @"X";
         self.whichPlayerLabel.textColor = [UIColor blueColor];
+        gameState = 0;
         [self.timer invalidate];
         [self startGame];
+
     }
 }
 
