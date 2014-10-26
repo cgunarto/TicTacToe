@@ -440,15 +440,15 @@ int secondsLeft; //?? should this be here ?
 {
     if (reset == YES)
     {
-        self.labelOne.text = nil;
-        self.labelTwo.text = nil;
-        self.labelThree.text = nil;
-        self.labelFour.text = nil;
-        self.labelFive.text = nil;
-        self.labelSix.text = nil;
-        self.labelSeven.text = nil;
-        self.labelEight.text = nil;
-        self.labelNine.text = nil;
+        self.labelOne.text = @"";
+        self.labelTwo.text = @"";
+        self.labelThree.text = @"";
+        self.labelFour.text = @"";
+        self.labelFive.text = @"";
+        self.labelSix.text = @"";
+        self.labelSeven.text = @"";
+        self.labelEight.text = @"";
+        self.labelNine.text = @"";
         self.whichPlayerLabel.text = @"X";
         self.whichPlayerLabel.textColor = [UIColor blueColor];
         [self.timer invalidate];
@@ -526,8 +526,6 @@ Make this into its own method
 
 /*INTERFACE
 Nicer X O buttons
-Copy JSON view of the Tic Tac Toe and place that in the opening screen
- 
 MAKE ANIMATION WITH TIMER and the 0.1f interval
 
  */
