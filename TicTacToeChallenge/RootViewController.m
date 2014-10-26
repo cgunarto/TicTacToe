@@ -32,6 +32,8 @@
 
 @property (weak, nonatomic) NSMutableArray *currentBoardState;
 
+@property BOOL isPlayingWithComputer;
+
 @end
 
 //[self.timer invalidate]; // stop the timer -- this works
@@ -119,26 +121,39 @@ int secondsLeft; //?? should this be here ?
 
 - (void) switchLabelToNextPlayer
 {
-    [self.timer invalidate]; //TESTING - if the label switches then timer should stop
-    secondsLeft = ksecondsForTimer;
-    [self countdownTimer];
+    if (self.isPlayingWithComputer == NO)
+    {
+        [self.timer invalidate]; //TESTING - if the label switches then timer should stop
+        secondsLeft = ksecondsForTimer;
+        [self countdownTimer];
 
-    NSString *currentPlayer = self.whichPlayerLabel.text;
-    if ([currentPlayer isEqualToString: @"X"])
+        NSString *currentPlayer = self.whichPlayerLabel.text;
+        if ([currentPlayer isEqualToString: @"X"])
+        {
+            self.whichPlayerLabel.text = @"O";
+            self.whichPlayerLabel.textColor = [UIColor redColor];
+            [self disableButtonLabel:self.xButtonLabel];
+            [self enableButtonLabel:self.oButtonLabel];
+        }
+
+        else if ([currentPlayer isEqualToString: @"O"])
+        {
+            self.whichPlayerLabel.text = @"X";
+            self.whichPlayerLabel.textColor = [UIColor blueColor];
+            [self disableButtonLabel:self.oButtonLabel];
+            [self enableButtonLabel:self.xButtonLabel];
+        }
+    }
+
+    else
     {
         self.whichPlayerLabel.text = @"O";
         self.whichPlayerLabel.textColor = [UIColor redColor];
         [self disableButtonLabel:self.xButtonLabel];
         [self enableButtonLabel:self.oButtonLabel];
+        [self playerMakeMove];
     }
 
-    else if ([currentPlayer isEqualToString: @"O"])
-    {
-        self.whichPlayerLabel.text = @"X";
-        self.whichPlayerLabel.textColor = [UIColor blueColor];
-        [self disableButtonLabel:self.oButtonLabel];
-        [self enableButtonLabel:self.xButtonLabel];
-    }
 
 }
 
@@ -413,6 +428,7 @@ int secondsLeft; //?? should this be here ?
 
 - (IBAction)vsCompButtonPressed:(id)sender
 {
+    self.isPlayingWithComputer = YES;
     [self computerMakeMove];
 }
 
@@ -433,11 +449,13 @@ int secondsLeft; //?? should this be here ?
 
 - (void)playerMakeMove
 {
-    if ([self.whichPlayerLabel.text isEqual:@"X"])
-    {
-        [self computerMakeMove];
-    }
+    NSLog(@"You got this far!");
+    // when player made a move
+    // when the label switches to X, computer gets to go again
+    // computer gets to go again
+
 }
+
 
 //- (void) switchToComputer
 //{
