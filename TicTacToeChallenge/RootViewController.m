@@ -30,9 +30,9 @@
 
 @property (weak, nonatomic) IBOutlet UIButton *startButton;
 
-@property (weak, nonatomic) NSMutableArray *currentBoardState;
-
 @property BOOL isPlayingWithComputer;
+@property (strong, nonatomic) NSArray *cornerLabelArray;
+
 
 @end
 
@@ -58,6 +58,8 @@ int secondsLeft; //?? should this be here ?
     UIPanGestureRecognizer *oButtonPan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(oButtonHandler:)];
     [self.oButtonLabel addGestureRecognizer:oButtonPan];
     [self disableButtonLabel:self.oButtonLabel];
+
+     self.cornerLabelArray= [NSArray arrayWithObjects:self.labelOne, self.labelThree, self.labelSeven, self.labelNine, nil];
 }
 
 # pragma mark START GAME BUTTON AND INITIAL BUTTON STATE
@@ -147,11 +149,11 @@ int secondsLeft; //?? should this be here ?
 
     else
     {
+        NSLog(@"Switch label knows that we're playing against a computer");
         self.whichPlayerLabel.text = @"O";
         self.whichPlayerLabel.textColor = [UIColor redColor];
         [self disableButtonLabel:self.xButtonLabel];
         [self enableButtonLabel:self.oButtonLabel];
-        [self playerMakeMove];
     }
 
 
@@ -222,7 +224,7 @@ int secondsLeft; //?? should this be here ?
         [self switchLabelToNextPlayer];
         }
     }
-        [self checkWhoWins:[self whoWon]];
+    [self checkWhoWins:[self whoWon]];
 }
 
 #pragma mark GESTURE: PAN ACTIONS
@@ -417,14 +419,6 @@ int secondsLeft; //?? should this be here ?
 
 #pragma mark PLAY AGAINST COMPUTER
 
-// add a button that says play against computer
-// computer starts first
-// store all label in an array
-// generate a random number between 0-9
-// if the label is filled, generate another random number
-// otherwise fill that label with X and then it's human player turn
-
-// pass the board state
 
 - (IBAction)vsCompButtonPressed:(id)sender
 {
@@ -435,8 +429,7 @@ int secondsLeft; //?? should this be here ?
 - (void)computerMakeMove
 {
     int randomCorner = arc4random_uniform(4);
-    NSMutableArray *cornerLabelArray= [NSMutableArray arrayWithObjects:self.labelOne, self.labelThree, self.labelSeven, self.labelNine, nil];
-    UILabel *labelChosen = cornerLabelArray[randomCorner];
+    UILabel *labelChosen = self.cornerLabelArray[randomCorner];
 
     if (![labelChosen.text isEqual:@"X"]||![labelChosen.text isEqual:@"O"]) // if it's empty then fill it with computer move
     {
@@ -449,11 +442,8 @@ int secondsLeft; //?? should this be here ?
 
 - (void)playerMakeMove
 {
-    NSLog(@"You got this far!");
-    // when player made a move
-    // when the label switches to X, computer gets to go again
-    // computer gets to go again
-
+    //when player makes a move, it's calling the tap label actions
+    //tap label action needs to know the right player to switch to (eg when computer is playing or when human is playing)
 }
 
 
