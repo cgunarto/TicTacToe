@@ -184,6 +184,21 @@
                                     <action selector="onStartButtonPressed:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="fZN-FQ-pBx"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="E0y-Wy-KJz">
+                                <rect key="frame" x="256" y="34" width="30" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="6ER-08-co7"/>
+                                    <constraint firstAttribute="width" constant="30" id="wYg-hY-KCD"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="HiraKakuProN-W3" family="Hiragino Kaku Gothic ProN" pointSize="17"/>
+                                <state key="normal" title="VS ">
+                                    <color key="titleColor" red="0.20000000298023224" green="0.20000000298023224" blue="0.20000000298023224" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="vsCompButtonPressed:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="Of4-sk-fKy"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <gestureRecognizers/>
@@ -214,10 +229,12 @@
                             <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="cKn-aA-kD6" secondAttribute="bottom" constant="76" id="bpj-pb-5C5"/>
                             <constraint firstItem="KMM-WA-43J" firstAttribute="top" secondItem="d2Z-GM-c3q" secondAttribute="bottom" constant="7" id="cWp-1V-cV5"/>
                             <constraint firstItem="8XG-uz-scg" firstAttribute="top" secondItem="6cn-ds-iqk" secondAttribute="bottom" constant="7" id="h9t-Nx-QjA"/>
+                            <constraint firstItem="E0y-Wy-KJz" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="14" id="jR3-3a-gqe"/>
                             <constraint firstItem="QIT-0T-B5Q" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="166" id="kWI-HF-emt"/>
                             <constraint firstAttribute="centerX" secondItem="4Er-WR-VPi" secondAttribute="centerX" id="msd-NY-D5G"/>
                             <constraint firstItem="Y0O-bL-DMJ" firstAttribute="leading" secondItem="4Er-WR-VPi" secondAttribute="trailing" constant="22" id="oLq-Rl-W6P"/>
                             <constraint firstItem="uNH-gF-9he" firstAttribute="leading" secondItem="qje-e4-ItV" secondAttribute="trailing" constant="7" id="urd-nU-jrI"/>
+                            <constraint firstItem="E0y-Wy-KJz" firstAttribute="leading" secondItem="Y0O-bL-DMJ" secondAttribute="trailing" constant="14" id="x6i-dc-yxD"/>
                             <constraint firstItem="8XG-uz-scg" firstAttribute="leading" secondItem="QIT-0T-B5Q" secondAttribute="trailing" constant="7" id="zr0-sz-Zx8"/>
                         </constraints>
                         <connections>

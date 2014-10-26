@@ -8,6 +8,7 @@
 
 #import "RootViewController.h"
 #define ksecondsForTimer 16
+#include <stdlib.h>
 
 @interface RootViewController () <UIAlertViewDelegate>
 @property (weak, nonatomic) IBOutlet UILabel *labelOne;
@@ -399,6 +400,63 @@ int secondsLeft; //?? should this be here ?
     }
 }
 
+#pragma mark PLAY AGAINST COMPUTER
+
+// add a button that says play against computer
+// computer starts first
+// store all label in an array
+// generate a random number between 0-9
+// if the label is filled, generate another random number
+// otherwise fill that label with X and then it's human player turn
+
+// pass the board state
+
+- (IBAction)vsCompButtonPressed:(id)sender
+{
+    [self computerMakeMove];
+}
+
+- (void)computerMakeMove
+{
+    int randomCorner = arc4random_uniform(4);
+    NSMutableArray *cornerLabelArray= [NSMutableArray arrayWithObjects:self.labelOne, self.labelThree, self.labelSeven, self.labelNine, nil];
+    UILabel *labelChosen = cornerLabelArray[randomCorner];
+
+    if (![labelChosen.text isEqual:@"X"]||![labelChosen.text isEqual:@"O"]) // if it's empty then fill it with computer move
+    {
+        labelChosen.text = @"X";
+        labelChosen.textColor = [UIColor blueColor];
+//        [self playerMakeMove];
+    }
+}
+
+//- (void)playerMakeMove
+//{
+//    if ([self.whichPlayerLabel.text isEqual:@"X"])
+//    {
+//        [self computerMakeMove];
+//    }
+//}
+
+//- (void) switchToComputer
+//{
+////    [self.timer invalidate];
+////    secondsLeft = ksecondsForTimer;
+//
+//    NSString *currentPlayer = self.whichPlayerLabel.text;
+//    if ([currentPlayer isEqualToString: @"O"])
+//    {
+//        self.whichPlayerLabel.text = @"X";
+//        self.whichPlayerLabel.textColor = [UIColor blueColor];
+//        [self disableButtonLabel:self.oButtonLabel];
+//        [self enableButtonLabel:self.xButtonLabel];
+//        [self computerMakeMove];
+//    }
+//
+//    [self playerMakeMove];
+//    
+//}
+
 
 /*BUGS
 AlertView is deprecated change it to something else
@@ -430,27 +488,26 @@ MAKE ANIMATION WITH TIMER and the 0.1f interval
 
 USE NSARRAY OR NSDICTIONARY FOR STATES1-9 TO HOLD VARIABLE OBJECTS?
 USE THIS TO CHECK BOARD OR DETERMINE WINNING NUMBER
+ 
+check if player has winning combination of 123,456,789,147,258,369,159,357 then return TRUE
+if YES, return TRUE, else FALSE
+Check gameState:
+*/
+//
+//- (BOOL) hasWinningCombination : (NSString *) player
+//{
+//
+//    NSMutableArray *ticTacToeBoardValue = [[NSMutableArray alloc] init];
+//    [ticTacToeBoardValue insertObject:self.labelOne atIndex:0];
+//    [ticTacToeBoardValue insertObject:self.labelTwo atIndex:1];
+//    [ticTacToeBoardValue insertObject:self.labelThree atIndex:2];
+//    [ticTacToeBoardValue insertObject:<#(id)#> atIndex:<#(NSUInteger)#>]
+//
+//}
 
-- (BOOL) hasWinningCombination : (NSString *) player
-{
 
-}
 
-    check if player has winning combination of 123,456,789,147,258,369,159,357 then return TRUE
-    if YES, return TRUE, else FALSE
-    Check gameState:
 
-    NSMutableArray *ticTacToeBoardValue = [[NSMutableArray alloc] init];
-    ticTacToeBoardValue [0] = [self.labelOne.text isEqualToString:previousPlayer];
-    ticTacToeBoardValue [1] = [self.labelTwo.text isEqualToString:previousPlayer];
-    ticTacToeBoardValue [2] = self.labelThree.text is EqualToString;
-    ticTacToeBoardValue [3] = self.labelFour.text;
-    ticTacToeBoardValue [4] = self.labelFive.text;
-    ticTacToeBoardValue [5] = self.labelSix.text;
-    ticTacToeBoardValue [6] = self.labelSeven.text;
-    ticTacToeBoardValue [7] = self.labelEight.text;
-    ticTacToeBoardValue [8] = self.labelNine.text;
 
- */
 
 @end
