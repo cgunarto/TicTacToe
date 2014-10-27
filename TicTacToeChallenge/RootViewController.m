@@ -32,7 +32,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *startButton;
 
 @property BOOL isPlayingWithComputer;
-@property (strong, nonatomic) NSArray *cornerLabelArray;
+@property (strong, nonatomic) NSMutableArray *cornerLabelArray;
 
 
 @end
@@ -60,7 +60,7 @@ int secondsLeft; //?? should this be here ?
     [self.oButtonLabel addGestureRecognizer:oButtonPan];
     [self disableButtonLabel:self.oButtonLabel];
 
-     self.cornerLabelArray= [NSArray arrayWithObjects:self.labelOne, self.labelThree, self.labelSeven, self.labelNine, nil];
+     self.cornerLabelArray= [NSMutableArray arrayWithObjects:self.labelOne, self.labelThree, self.labelSeven, self.labelNine, nil];
 }
 
 # pragma mark START GAME BUTTON AND INITIAL BUTTON STATE
@@ -484,7 +484,7 @@ int secondsLeft; //?? should this be here ?
 {
     // Find the empty boards and fill it with something
     NSMutableArray *boardState = [[NSMutableArray alloc] initWithObjects:self.labelOne, self.labelTwo, self.labelThree, self.labelFour, self.labelFive, self.labelSix, self.labelSeven, self.labelEight, self.labelNine, nil];
-    NSMutableArray *availableMoves = [[NSMutableArray alloc] init];
+    NSMutableArray *emptyLabels = [[NSMutableArray alloc] init];
 
     // if it's computer X's turn and there are all open labels left, take the corner label
     if ([self.whichPlayerLabel.text isEqualToString: @"X"] && self.isPlayingWithComputer == YES )
@@ -493,32 +493,40 @@ int secondsLeft; //?? should this be here ?
         {
             if ([[boardState[i] text] isEqual: @""])
             {
-                [availableMoves addObject:[boardState objectAtIndex:i]];
+                [emptyLabels addObject:[boardState objectAtIndex:i]];
             }
         }
 
-        if ([availableMoves count] == 0)
+        if ([emptyLabels count] == 9)
         {
-            NSInteger random3 = arc4random()%4;
-            UILabel *pickCornerLabel = [self.cornerLabelArray objectAtIndex:random3];
-            pickCornerLabel.text=@"X";
-            pickCornerLabel.textColor = [UIColor blueColor];
+            self.labelOne.text = @"X";
+            self.labelOne.textColor = [UIColor blueColor];
             [self switchLabelToNextPlayer];
         }
 
         else
-        {
-            UILabel *randomEmptyLabel = [availableMoves objectAtIndex: arc4random() % [availableMoves count]];
-            randomEmptyLabel.text = @"X";
-            randomEmptyLabel.textColor = [UIColor blueColor];
-            [self switchLabelToNextPlayer];
-        }
+            if (([emptyLabels count] == 7) && [[boardState[4] text] isEqual:@"O"]) //if player takes the middle box
+            {
+                self.labelThree.text = @"X";
+                self.labelThree.textColor = [UIColor blueColor];
+                [self switchLabelToNextPlayer];
+            }
+
+        else
+            {
+                UILabel *randomEmptyLabel = [emptyLabels objectAtIndex: arc4random() % [emptyLabels count]];
+                randomEmptyLabel.text = @"X";
+                randomEmptyLabel.textColor = [UIColor blueColor];
+                [self switchLabelToNextPlayer];
+            }
+
     }
 
-    if ([availableMoves count] > 0)
+    if ([emptyLabels count] > 0)
     {
         [self playerMakeMove];
     }
+
 
 }
 
