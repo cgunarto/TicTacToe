@@ -503,7 +503,11 @@ int secondsLeft; //?? should this be here ?
         [self switchLabelToNextPlayer];
 
     }
-    [self playerMakeMove];
+
+    if ([availableMoves count] > 0)
+    {
+        [self playerMakeMove];
+    }
 
 }
 
