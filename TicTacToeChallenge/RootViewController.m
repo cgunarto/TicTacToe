@@ -641,7 +641,6 @@ int secondsLeft;
         [self playerMakeMove];
     }
 
-
 }
 
 - (void)playerMakeMove
@@ -656,7 +655,8 @@ int secondsLeft;
 /*BUGS
 AlertView is deprecated change it to something else
 WHEN PLAYERS HIT A DRAW - nothing happens
-TIMER doesn't reset when game is reset
+TIMER doesn't reset when game is reset with Computer
+When the computer wins, it doesn't get checked until it's next player's turn
 WHEN USER IS DRAGGING THE LETTER, TIMER DOESN'T MOVE
 */
 
