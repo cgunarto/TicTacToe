@@ -101,7 +101,6 @@ int secondsLeft; //?? should this be here ?
     }
     self.timer = [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(updateCounter:) userInfo:nil repeats:YES];
 
-
 }
 
 - (void)updateCounter:(NSTimer *)theTimer
@@ -487,6 +486,7 @@ int secondsLeft; //?? should this be here ?
     NSMutableArray *boardState = [[NSMutableArray alloc] initWithObjects:self.labelOne, self.labelTwo, self.labelThree, self.labelFour, self.labelFive, self.labelSix, self.labelSeven, self.labelEight, self.labelNine, nil];
     NSMutableArray *availableMoves = [[NSMutableArray alloc] init];
 
+    // if it's computer X's turn and there are all open labels left, take the corner label
     if ([self.whichPlayerLabel.text isEqualToString: @"X"] && self.isPlayingWithComputer == YES )
     {
         for (int i = 0; i < 9; i++)
@@ -497,11 +497,22 @@ int secondsLeft; //?? should this be here ?
             }
         }
 
-        UILabel *randomEmptyLabel = [availableMoves objectAtIndex: arc4random() % [availableMoves count]];
-        randomEmptyLabel.text = @"X";
-        randomEmptyLabel.textColor = [UIColor blueColor];
-        [self switchLabelToNextPlayer];
+        if ([availableMoves count] == 0)
+        {
+            NSInteger random3 = arc4random()%4;
+            UILabel *pickCornerLabel = [self.cornerLabelArray objectAtIndex:random3];
+            pickCornerLabel.text=@"X";
+            pickCornerLabel.textColor = [UIColor blueColor];
+            [self switchLabelToNextPlayer];
+        }
 
+        else
+        {
+            UILabel *randomEmptyLabel = [availableMoves objectAtIndex: arc4random() % [availableMoves count]];
+            randomEmptyLabel.text = @"X";
+            randomEmptyLabel.textColor = [UIColor blueColor];
+            [self switchLabelToNextPlayer];
+        }
     }
 
     if ([availableMoves count] > 0)
@@ -513,8 +524,8 @@ int secondsLeft; //?? should this be here ?
 
 - (void)playerMakeMove
 {
-    [self checkWhoWins:[self whoWon]];
     [self countdownTimer];
+    [self checkWhoWins:[self whoWon]];
     NSLog(@"player next move is called!");
     // Timer has 15 seconds to make move and then it switches to computer move
 }
