@@ -95,10 +95,10 @@ int secondsLeft; //?? should this be here ?
 
 -(void)countdownTimer
 {
-//    if([self.timer isValid])
-//    {
-//        [self.timer invalidate];
-//    }
+    if([self.timer isValid])
+    {
+        [self.timer invalidate];
+    }
     self.timer = [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(updateCounter:) userInfo:nil repeats:YES];
 
 
@@ -111,10 +111,18 @@ int secondsLeft; //?? should this be here ?
         seconds = (secondsLeft %3600) % 60;
         self.counterLabel.text = [NSString stringWithFormat:@":%02d", seconds];
     }
-    else{
-        secondsLeft = ksecondsForTimer;
-        [self switchLabelToNextPlayer];
+    else
+    {
+        if (self.isPlayingWithComputer == YES)
+        {
+            [self computerMakeMove];
         }
+        else
+        {
+            secondsLeft = ksecondsForTimer;
+            [self switchLabelToNextPlayer];
+        }
+    }
 }
 
 
@@ -362,64 +370,71 @@ int secondsLeft; //?? should this be here ?
     }
 
     //Checking middle row 456
-    else if ([self.labelFour.text isEqualToString:previousPlayer] && [self.labelFive.text isEqualToString:previousPlayer] &&
+    else
+        if ([self.labelFour.text isEqualToString:previousPlayer] && [self.labelFive.text isEqualToString:previousPlayer] &&
         [self.labelSix.text isEqualToString:previousPlayer])
-    {
-        return self.labelFour.text;
-    }
+        {
+            return self.labelFour.text;
+        }
 
     //Checking bottom row 789
-    else if ([self.labelSeven.text isEqualToString:previousPlayer] && [self.labelEight.text isEqualToString:previousPlayer] &&
+    else
+        if ([self.labelSeven.text isEqualToString:previousPlayer] && [self.labelEight.text isEqualToString:previousPlayer] &&
         [self.labelNine.text isEqualToString:previousPlayer])
-    {
-        return self.labelSeven.text;
-    }
+        {
+            return self.labelSeven.text;
+        }
 
     //Checking left column 147
-    else if ([self.labelOne.text isEqualToString:previousPlayer] && [self.labelFour.text isEqualToString:previousPlayer] &&
+    else
+        if ([self.labelOne.text isEqualToString:previousPlayer] && [self.labelFour.text isEqualToString:previousPlayer] &&
         [self.labelSeven.text isEqualToString:previousPlayer])
-    {
-        return self.labelOne.text;
-    }
+        {
+            return self.labelOne.text;
+        }
 
     //Checking middle column 258
-    else if ([self.labelTwo.text isEqualToString:previousPlayer] && [self.labelFive.text isEqualToString:previousPlayer] &&
+    else
+        if ([self.labelTwo.text isEqualToString:previousPlayer] && [self.labelFive.text isEqualToString:previousPlayer] &&
              [self.labelEight.text isEqualToString:previousPlayer])
-    {
-        return self.labelTwo.text;
-    }
+        {
+            return self.labelTwo.text;
+        }
 
     //Checking right column 369
-    else if ([self.labelThree.text isEqualToString:previousPlayer] && [self.labelSix.text isEqualToString:previousPlayer] &&
+    else
+        if ([self.labelThree.text isEqualToString:previousPlayer] && [self.labelSix.text isEqualToString:previousPlayer] &&
              [self.labelNine.text isEqualToString:previousPlayer])
-    {
-        return self.labelThree.text;
-    }
+        {
+            return self.labelThree.text;
+        }
 
     //Checking diagonal from top left to bottom right 159
-    else if ([self.labelOne.text isEqualToString:previousPlayer] && [self.labelFive.text isEqualToString:previousPlayer] &&
+    else
+        if ([self.labelOne.text isEqualToString:previousPlayer] && [self.labelFive.text isEqualToString:previousPlayer] &&
              [self.labelNine.text isEqualToString:previousPlayer])
-    {
-        return self.labelOne.text;
-    }
+        {
+            return self.labelOne.text;
+        }
 
     //Checking diagonal from top left to bottom right 357
-    else if ([self.labelThree.text isEqualToString:previousPlayer] && [self.labelFive.text isEqualToString:previousPlayer] &&
+    else
+        if ([self.labelThree.text isEqualToString:previousPlayer] && [self.labelFive.text isEqualToString:previousPlayer] &&
              [self.labelSeven.text isEqualToString:previousPlayer])
-    {
-        return self.labelThree.text;
-    }
+        {
+            return self.labelThree.text;
+        }
 
    else
-    {
-      if (gameState == 9)
-      {
-          return @"draw";
-      }
-      else
-      {
-      return nil;
-      }
+   {
+       if (gameState == 9)
+          {
+              return @"draw";
+          }
+          else
+          {
+          return nil;
+          }
     }
 
 }
@@ -472,27 +487,32 @@ int secondsLeft; //?? should this be here ?
     NSMutableArray *boardState = [[NSMutableArray alloc] initWithObjects:self.labelOne, self.labelTwo, self.labelThree, self.labelFour, self.labelFive, self.labelSix, self.labelSeven, self.labelEight, self.labelNine, nil];
     NSMutableArray *availableMoves = [[NSMutableArray alloc] init];
 
-    for (int i = 0; i < 9; i++)
+    if ([self.whichPlayerLabel.text isEqualToString: @"X"] && self.isPlayingWithComputer == YES )
     {
-        if ([[boardState[i] text] isEqual: @""])
+        for (int i = 0; i < 9; i++)
         {
-            [availableMoves addObject:[boardState objectAtIndex:i]];
+            if ([[boardState[i] text] isEqual: @""])
+            {
+                [availableMoves addObject:[boardState objectAtIndex:i]];
+            }
         }
-    }
 
-    UILabel *randomEmptyLabel = [availableMoves objectAtIndex: arc4random() % [availableMoves count]];
-    randomEmptyLabel.text = @"X";
-    randomEmptyLabel.textColor = [UIColor blueColor];
+        UILabel *randomEmptyLabel = [availableMoves objectAtIndex: arc4random() % [availableMoves count]];
+        randomEmptyLabel.text = @"X";
+        randomEmptyLabel.textColor = [UIColor blueColor];
+        [self switchLabelToNextPlayer];
+
+    }
     [self playerMakeMove];
 
 }
 
 - (void)playerMakeMove
 {
-    NSLog(@"player next move is called!");
+    [self checkWhoWins:[self whoWon]];
     [self countdownTimer];
+    NSLog(@"player next move is called!");
     // Timer has 15 seconds to make move and then it switches to computer move
-
 }
 
 //- (void) switchToComputer
