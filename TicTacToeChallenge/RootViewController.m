@@ -10,6 +10,7 @@
 #include <stdlib.h>
 
 #define ksecondsForTimer 16
+#define kTimerInterval 1.0f
 
 @interface RootViewController () <UIAlertViewDelegate>
 @property (weak, nonatomic) IBOutlet UILabel *labelOne;
@@ -37,14 +38,11 @@
 
 @end
 
-//[self.timer invalidate]; // stop the timer -- this works
-//[self countdownTimer];
 
 @implementation RootViewController
-//?? @synthesize counterLabel; this was in the example but is it necessary?
 
-int seconds; // ?? should this be here ?
-int secondsLeft; //?? should this be here ?
+int seconds;
+int secondsLeft;
 
 - (void)viewDidLoad
 {
@@ -99,7 +97,7 @@ int secondsLeft; //?? should this be here ?
     {
         [self.timer invalidate];
     }
-    self.timer = [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(updateCounter:) userInfo:nil repeats:YES];
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:kTimerInterval target:self selector:@selector(updateCounter:) userInfo:nil repeats:YES];
 
 }
 
@@ -132,7 +130,7 @@ int secondsLeft; //?? should this be here ?
 {
     if (self.isPlayingWithComputer == NO)
     {
-        [self.timer invalidate]; //TESTING - if the label switches then timer should stop
+        [self.timer invalidate]; //if the label switches then timer should stop
         secondsLeft = ksecondsForTimer;
         [self countdownTimer];
 
@@ -498,13 +496,6 @@ int secondsLeft; //?? should this be here ?
             }
         }
 
-        // if there are 9 empty labels - DONE
-        // take any corner labels - DONE
-
-        // if there are 7 empty labels
-            // if player took center spot --> try to force a move on human player
-            // if player didn't take center spot --> take center spot -- DONE
-
         // if there are 5 empty labels
             // if human didn't block the 2X, take the win
             // if player did prevent it, create a fork
@@ -538,13 +529,13 @@ int secondsLeft; //?? should this be here ?
                     self.labelFive.textColor = [UIColor blueColor];
                     [self switchLabelToNextPlayer];
                 }
-                else if ([self.labelOne.text isEqual: @"X"] || [self.labelThree.text isEqual: @"X"] )
+                else if ([self.labelOne.text isEqual: @"X"] || [self.labelThree.text isEqual: @"X"] ) // take the label across
                 {
                     self.labelTwo.text = @"X";
                     self.labelTwo.textColor = [UIColor blueColor];
                     [self switchLabelToNextPlayer];
                 }
-                else if ([self.labelSeven.text isEqual: @"X"] || [self.labelNine.text isEqual: @"X"] )
+                else if ([self.labelSeven.text isEqual: @"X"] || [self.labelNine.text isEqual: @"X"] ) // take the label across
                 {
                     self.labelEight.text = @"X";
                     self.labelEight.textColor = [UIColor blueColor];
@@ -552,14 +543,55 @@ int secondsLeft; //?? should this be here ?
                 }
             }
 
-//        else
-//            if ([emptyLabels count] == 5)
-//            {
-//                if ([[boardState[4] text] isEqual:@"X"])
-//                {
-//
-//                }
-//            }
+        else
+            if ([emptyLabels count] == 5)
+            {
+                if ([[boardState[4] text] isEqual:@"X"]) //Take the diagonal win
+                {
+                    if([self.labelOne.text isEqual: @"X"])
+                    {
+                        self.labelNine.text = @"X";
+                        self.labelNine.textColor = [UIColor blueColor];
+                        [self switchLabelToNextPlayer];
+                    }
+                    else if([self.labelNine.text isEqual: @"X"])
+                    {
+                        self.labelOne.text = @"X";
+                        self.labelOne.textColor = [UIColor blueColor];
+                        [self switchLabelToNextPlayer];
+                    }
+                    else if([self.labelThree.text isEqual: @"X"])
+                    {
+                        self.labelSeven.text = @"X";
+                        self.labelSeven.textColor = [UIColor blueColor];
+                        [self switchLabelToNextPlayer];
+                    }
+                    else if([self.labelSeven.text isEqual: @"X"])
+                    {
+                        self.labelNine.text = @"X";
+                        self.labelNine.textColor = [UIColor blueColor];
+                        [self switchLabelToNextPlayer];
+                    }
+
+                }
+                if ([[boardState[4] text] isEqual:@"O"])
+                {
+                    if(([self.labelOne.text isEqual:@"X"] && [self.labelOne.text isEqual:@"X"])||
+                       ([self.labelOne.text isEqual:@"X"] && [self.labelOne.text isEqual:@"X"]))
+                    {
+                        self.labelThree.text = @"X";
+                        self.labelThree.textColor = [UIColor blueColor];
+                        [self switchLabelToNextPlayer];
+                    }
+                    if(([self.labelOne.text isEqual:@"X"] && [self.labelFour.text isEqual:@"X"])||
+                       ([self.labelEight.text isEqual:@"X"] && [self.labelNine.text isEqual:@"X"]))
+                    {
+                        self.labelSeven.text = @"X";
+                        self.labelSeven.textColor = [UIColor blueColor];
+                        [self switchLabelToNextPlayer];
+                    }
+                }
+            }
 
         else
             {
@@ -653,6 +685,12 @@ Check gameState:
 //}
 
 
+// if there are 9 empty labels - DONE
+// take any corner labels - DONE
+
+// if there are 7 empty labels
+// if player took center spot --> try to force a move on human player -- DONE
+// if player didn't take center spot --> take center spot -- DONE
 
 
 
