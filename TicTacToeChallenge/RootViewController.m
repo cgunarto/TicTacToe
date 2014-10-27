@@ -95,12 +95,10 @@ int secondsLeft; //?? should this be here ?
 
 -(void)countdownTimer
 {
-
-//?? secondsLeft = seconds = 0; this was here but seemed unecessary
-    if([self.timer isValid])
-    {
-        [self.timer invalidate];
-    }
+//    if([self.timer isValid])
+//    {
+//        [self.timer invalidate];
+//    }
     self.timer = [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(updateCounter:) userInfo:nil repeats:YES];
 
 
@@ -453,7 +451,7 @@ int secondsLeft; //?? should this be here ?
         self.whichPlayerLabel.text = @"X";
         self.whichPlayerLabel.textColor = [UIColor blueColor];
         [self.timer invalidate];
-        [self startGame];
+        self.startButton.enabled = YES;
 
     }
 }
@@ -493,6 +491,7 @@ int secondsLeft; //?? should this be here ?
 {
     NSLog(@"player next move is called!");
     [self countdownTimer];
+    // Timer has 15 seconds to make move and then it switches to computer move
 
 }
 
