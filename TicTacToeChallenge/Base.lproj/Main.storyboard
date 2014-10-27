@@ -251,6 +251,7 @@
                         <outlet property="labelTwo" destination="We5-fu-igl" id="FKH-Ha-o0N"/>
                         <outlet property="oButtonLabel" destination="Whu-1z-fae" id="wvb-zM-gOK"/>
                         <outlet property="startButton" destination="Y0O-bL-DMJ" id="Aar-mF-cQT"/>
+                        <outlet property="vsComputerButton" destination="E0y-Wy-KJz" id="x0R-rx-hVF"/>
                         <outlet property="whichPlayerLabel" destination="cKn-aA-kD6" id="zya-wo-FcE"/>
                         <outlet property="xButtonLabel" destination="ZeA-UD-QqD" id="Bjx-6g-PQZ"/>
                     </connections>

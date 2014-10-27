@@ -9,7 +9,7 @@
 #import "RootViewController.h"
 #include <stdlib.h>
 
-#define ksecondsForTimer 16
+#define ksecondsForTimer 11
 #define kTimerInterval 1.0f
 
 @interface RootViewController () <UIAlertViewDelegate>
@@ -31,6 +31,8 @@
 @property NSTimer *timer;
 
 @property (weak, nonatomic) IBOutlet UIButton *startButton;
+@property (weak, nonatomic) IBOutlet UIButton *vsComputerButton;
+
 
 @property BOOL isPlayingWithComputer;
 @property (strong, nonatomic) NSMutableArray *cornerLabelArray;
@@ -65,6 +67,7 @@ int secondsLeft;
 - (IBAction)onStartButtonPressed:(id)sender
 {
     [self startGame];
+    self.vsComputerButton.enabled = NO;
 }
 
 - (void) startGame
@@ -496,14 +499,6 @@ int secondsLeft;
             }
         }
 
-        // if there are 5 empty labels
-            // if human didn't block the 2X, take the win
-            // if player did prevent it, create a fork
-
-        // if there are 3 empty labels
-            //
-
-
         if ([emptyLabels count] == 9)
         {
             UILabel *randomCornerLabel = [self.cornerLabelArray objectAtIndex: arc4random() % [self.cornerLabelArray count]];
@@ -536,90 +531,98 @@ int secondsLeft;
                 }
             }
 
-        else
-            if ([emptyLabels count] == 5)
-            {
-                if ([[boardState[4] text] isEqual:@"X"]) //Take the diagonal win
-                {
-                    if([self.labelOne.text isEqual: @"X"])
-                    {
-                        self.labelNine.text = @"X";
-                        self.labelNine.textColor = [UIColor blueColor];
-                        [self switchLabelToNextPlayer];
-                    }
-                    else if([self.labelNine.text isEqual: @"X"])
-                    {
-                        self.labelOne.text = @"X";
-                        self.labelOne.textColor = [UIColor blueColor];
-                        [self switchLabelToNextPlayer];
-                    }
-                    else if([self.labelThree.text isEqual: @"X"])
-                    {
-                        self.labelSeven.text = @"X";
-                        self.labelSeven.textColor = [UIColor blueColor];
-                        [self switchLabelToNextPlayer];
-                    }
-                    else if([self.labelSeven.text isEqual: @"X"])
-                    {
-                        self.labelNine.text = @"X";
-                        self.labelNine.textColor = [UIColor blueColor];
-                        [self switchLabelToNextPlayer];
-                    }
 
-                }
+// if there are 5 empty labels
+// if human didn't block the 2X, take the win
+// if player did prevent it, create a fork
 
-                else if ([[boardState[4] text] isEqual:@"O"])
-                {
-
-                    if(([self.labelTwo.text isEqual:@"X"] && [self.labelThree.text isEqual:@"X"])||
-                            ([self.labelFour.text isEqual:@"X"] && [self.labelSeven.text isEqual:@"X"]))
-                    {
-                        if ([self.labelOne.text isEqual:@""])
-                        {
-                            self.labelOne.text = @"X";
-                            self.labelOne.textColor = [UIColor blueColor];
-                            [self switchLabelToNextPlayer];
-                        }
-                    }
-
-                    else if(([self.labelOne.text isEqual:@"X"] && [self.labelTwo.text isEqual:@"X"])||
-                    ([self.labelSix.text isEqual:@"X"] && [self.labelEight.text isEqual:@"X"]))
-                    {
-                            if ([self.labelThree.text isEqual:@""])
-                            {
-                                self.labelThree.text = @"X";
-                                self.labelThree.textColor = [UIColor blueColor];
-                                [self switchLabelToNextPlayer];
-                            }
-                    }
-
-
-                    else if(([self.labelOne.text isEqual:@"X"] && [self.labelFour.text isEqual:@"X"])||
-                           ([self.labelEight.text isEqual:@"X"] && [self.labelNine.text isEqual:@"X"]))
-                    {
-                        if ([self.labelSeven.text isEqual:@""])
-                        {
-                                self.labelSeven.text = @"X";
-                                self.labelSeven.textColor = [UIColor blueColor];
-                                [self switchLabelToNextPlayer];
-                        }
-                    }
-                    else if(([self.labelThree.text isEqual:@"X"] && [self.labelSix.text isEqual:@"X"])||
-                            ([self.labelSeven.text isEqual:@"X"] && [self.labelEight.text isEqual:@"X"]))
-                    {
-                        if ([self.labelNine.text isEqual:@""])
-                        {
-                            self.labelNine.text = @"X";
-                            self.labelNine.textColor = [UIColor blueColor];
-                            [self switchLabelToNextPlayer];
-                        }
-                    }
-                }
-                else //else if the 2XXs were blocked
-                {
-
-                }
-        }
+// if there are 3 empty labels
+//
+//        else
+//            if ([emptyLabels count] == 5)
+//            {
+//                if ([[boardState[4] text] isEqual:@"X"]) //Take the diagonal win
+//                {
+//                    if([self.labelOne.text isEqual: @"X"])
+//                    {
+//                        self.labelNine.text = @"X";
+//                        self.labelNine.textColor = [UIColor blueColor];
+//                        [self switchLabelToNextPlayer];
+//                    }
+//                    else if([self.labelNine.text isEqual: @"X"])
+//                    {
+//                        self.labelOne.text = @"X";
+//                        self.labelOne.textColor = [UIColor blueColor];
+//                        [self switchLabelToNextPlayer];
+//                    }
+//                    else if([self.labelThree.text isEqual: @"X"])
+//                    {
+//                        self.labelSeven.text = @"X";
+//                        self.labelSeven.textColor = [UIColor blueColor];
+//                        [self switchLabelToNextPlayer];
+//                    }
+//                    else if([self.labelSeven.text isEqual: @"X"])
+//                    {
+//                        self.labelNine.text = @"X";
+//                        self.labelNine.textColor = [UIColor blueColor];
+//                        [self switchLabelToNextPlayer];
+//                    }
+//
+//                }
+//
+//                else if ([[boardState[4] text] isEqual:@"O"])
+//                {
+//
+//                    if(([self.labelTwo.text isEqual:@"X"] && [self.labelThree.text isEqual:@"X"])||
+//                            ([self.labelFour.text isEqual:@"X"] && [self.labelSeven.text isEqual:@"X"]))
+//                    {
+//                        if ([self.labelOne.text isEqual:@""])
+//                        {
+//                            self.labelOne.text = @"X";
+//                            self.labelOne.textColor = [UIColor blueColor];
+//                            [self switchLabelToNextPlayer];
+//                        }
+//                    }
+//
+//                    else if(([self.labelOne.text isEqual:@"X"] && [self.labelTwo.text isEqual:@"X"])||
+//                    ([self.labelSix.text isEqual:@"X"] && [self.labelEight.text isEqual:@"X"]))
+//                    {
+//                            if ([self.labelThree.text isEqual:@""])
+//                            {
+//                                self.labelThree.text = @"X";
+//                                self.labelThree.textColor = [UIColor blueColor];
+//                                [self switchLabelToNextPlayer];
+//                            }
+//                    }
+//
+//
+//                    else if(([self.labelOne.text isEqual:@"X"] && [self.labelFour.text isEqual:@"X"])||
+//                           ([self.labelEight.text isEqual:@"X"] && [self.labelNine.text isEqual:@"X"]))
+//                    {
+//                        if ([self.labelSeven.text isEqual:@""])
+//                        {
+//                                self.labelSeven.text = @"X";
+//                                self.labelSeven.textColor = [UIColor blueColor];
+//                                [self switchLabelToNextPlayer];
+//                        }
+//                    }
+//                    else if(([self.labelThree.text isEqual:@"X"] && [self.labelSix.text isEqual:@"X"])||
+//                            ([self.labelSeven.text isEqual:@"X"] && [self.labelEight.text isEqual:@"X"]))
+//                    {
+//                        if ([self.labelNine.text isEqual:@""])
+//                        {
+//                            self.labelNine.text = @"X";
+//                            self.labelNine.textColor = [UIColor blueColor];
+//                            [self switchLabelToNextPlayer];
+//                        }
+//                    }
+//                }
+//                else
+//                {
+//                    NSLog(@"Computer doesn't know what to do");
+//                }
+//
+//        }
 
         else
             {
@@ -627,11 +630,13 @@ int secondsLeft;
                 randomEmptyLabel.text = @"X";
                 randomEmptyLabel.textColor = [UIColor blueColor];
                 [self switchLabelToNextPlayer];
+                NSLog(@"Computer is supposed to make a random move");
             }
 
     }
 
-    if ([emptyLabels count] > 0)
+    if ([emptyLabels count] > 0 && ![[self whoWon]isEqual:@"X"] && ![[self whoWon]isEqual:@"O"] )
+        //need to add a validation that nobody has won
     {
         [self playerMakeMove];
     }
@@ -644,27 +649,8 @@ int secondsLeft;
     [self countdownTimer];
     [self checkWhoWins:[self whoWon]];
     NSLog(@"player next move is called!");
-    // Timer has 15 seconds to make move and then it switches to computer move
 }
 
-//- (void) switchToComputer
-//{
-////    [self.timer invalidate];
-////    secondsLeft = ksecondsForTimer;
-//
-//    NSString *currentPlayer = self.whichPlayerLabel.text;
-//    if ([currentPlayer isEqualToString: @"O"])
-//    {
-//        self.whichPlayerLabel.text = @"X";
-//        self.whichPlayerLabel.textColor = [UIColor blueColor];
-//        [self disableButtonLabel:self.oButtonLabel];
-//        [self enableButtonLabel:self.xButtonLabel];
-//        [self computerMakeMove];
-//    }
-//
-//    [self playerMakeMove];
-//    
-//}
 
 
 /*BUGS
@@ -675,12 +661,7 @@ WHEN USER IS DRAGGING THE LETTER, TIMER DOESN'T MOVE
 */
 
 /*CODE CLEAN UP
-Clean up whowins function
-Add a #define value for X or Y, is there a Magic String?
 
-Make this into its own method
- tappedLabel.text = self.whichPlayerLabel.text;
- tappedLabel.textColor = self.whichPlayerLabel.textColor;
 
 */
 
