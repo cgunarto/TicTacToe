@@ -504,13 +504,6 @@ int secondsLeft;
             //
 
 
-//        if ([emptyLabels count] == 9)
-//        {
-//            self.labelOne.text = @"X";
-//            self.labelOne.textColor = [UIColor blueColor];
-//            [self switchLabelToNextPlayer];
-//        }
-
         if ([emptyLabels count] == 9)
         {
             UILabel *randomCornerLabel = [self.cornerLabelArray objectAtIndex: arc4random() % [self.cornerLabelArray count]];
@@ -574,24 +567,59 @@ int secondsLeft;
                     }
 
                 }
-                if ([[boardState[4] text] isEqual:@"O"])
+
+                else if ([[boardState[4] text] isEqual:@"O"])
                 {
-                    if(([self.labelOne.text isEqual:@"X"] && [self.labelOne.text isEqual:@"X"])||
-                       ([self.labelOne.text isEqual:@"X"] && [self.labelOne.text isEqual:@"X"]))
+
+                    if(([self.labelTwo.text isEqual:@"X"] && [self.labelThree.text isEqual:@"X"])||
+                            ([self.labelFour.text isEqual:@"X"] && [self.labelSeven.text isEqual:@"X"]))
                     {
-                        self.labelThree.text = @"X";
-                        self.labelThree.textColor = [UIColor blueColor];
-                        [self switchLabelToNextPlayer];
+                        if ([self.labelOne.text isEqual:@""])
+                        {
+                            self.labelOne.text = @"X";
+                            self.labelOne.textColor = [UIColor blueColor];
+                            [self switchLabelToNextPlayer];
+                        }
                     }
-                    if(([self.labelOne.text isEqual:@"X"] && [self.labelFour.text isEqual:@"X"])||
-                       ([self.labelEight.text isEqual:@"X"] && [self.labelNine.text isEqual:@"X"]))
+
+                    else if(([self.labelOne.text isEqual:@"X"] && [self.labelTwo.text isEqual:@"X"])||
+                    ([self.labelSix.text isEqual:@"X"] && [self.labelEight.text isEqual:@"X"]))
                     {
-                        self.labelSeven.text = @"X";
-                        self.labelSeven.textColor = [UIColor blueColor];
-                        [self switchLabelToNextPlayer];
+                            if ([self.labelThree.text isEqual:@""])
+                            {
+                                self.labelThree.text = @"X";
+                                self.labelThree.textColor = [UIColor blueColor];
+                                [self switchLabelToNextPlayer];
+                            }
+                    }
+
+
+                    else if(([self.labelOne.text isEqual:@"X"] && [self.labelFour.text isEqual:@"X"])||
+                           ([self.labelEight.text isEqual:@"X"] && [self.labelNine.text isEqual:@"X"]))
+                    {
+                        if ([self.labelSeven.text isEqual:@""])
+                        {
+                                self.labelSeven.text = @"X";
+                                self.labelSeven.textColor = [UIColor blueColor];
+                                [self switchLabelToNextPlayer];
+                        }
+                    }
+                    else if(([self.labelThree.text isEqual:@"X"] && [self.labelSix.text isEqual:@"X"])||
+                            ([self.labelSeven.text isEqual:@"X"] && [self.labelEight.text isEqual:@"X"]))
+                    {
+                        if ([self.labelNine.text isEqual:@""])
+                        {
+                            self.labelNine.text = @"X";
+                            self.labelNine.textColor = [UIColor blueColor];
+                            [self switchLabelToNextPlayer];
+                        }
                     }
                 }
-            }
+                else //else if the 2XXs were blocked
+                {
+
+                }
+        }
 
         else
             {
@@ -661,38 +689,5 @@ Nicer X O buttons
 MAKE ANIMATION WITH TIMER and the 0.1f interval
 
  */
-
-
-/* Figuring out the AI stuff
-
-USE NSARRAY OR NSDICTIONARY FOR STATES1-9 TO HOLD VARIABLE OBJECTS?
-USE THIS TO CHECK BOARD OR DETERMINE WINNING NUMBER
- 
-check if player has winning combination of 123,456,789,147,258,369,159,357 then return TRUE
-if YES, return TRUE, else FALSE
-Check gameState:
-*/
-//
-//- (BOOL) hasWinningCombination : (NSString *) player
-//{
-//
-//    NSMutableArray *ticTacToeBoardValue = [[NSMutableArray alloc] init];
-//    [ticTacToeBoardValue insertObject:self.labelOne atIndex:0];
-//    [ticTacToeBoardValue insertObject:self.labelTwo atIndex:1];
-//    [ticTacToeBoardValue insertObject:self.labelThree atIndex:2];
-//    [ticTacToeBoardValue insertObject:<#(id)#> atIndex:<#(NSUInteger)#>]
-//
-//}
-
-
-// if there are 9 empty labels - DONE
-// take any corner labels - DONE
-
-// if there are 7 empty labels
-// if player took center spot --> try to force a move on human player -- DONE
-// if player didn't take center spot --> take center spot -- DONE
-
-
-
 
 @end
