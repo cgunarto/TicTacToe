@@ -7,8 +7,9 @@
 //
 
 #import "RootViewController.h"
-#define ksecondsForTimer 16
 #include <stdlib.h>
+
+#define ksecondsForTimer 16
 
 @interface RootViewController () <UIAlertViewDelegate>
 @property (weak, nonatomic) IBOutlet UILabel *labelOne;
@@ -115,7 +116,7 @@ int secondsLeft; //?? should this be here ?
     else{
         secondsLeft = ksecondsForTimer;
         [self switchLabelToNextPlayer];
-    }
+        }
 }
 
 
@@ -464,28 +465,36 @@ int secondsLeft; //?? should this be here ?
 {
     self.isPlayingWithComputer = YES;
     [self computerMakeMove];
+    self.startButton.enabled = NO;
 }
 
 - (void)computerMakeMove
 {
-    // computer needs to check if board is full or empty
-    int randomCorner = arc4random_uniform(4);
-    UILabel *labelChosen = self.cornerLabelArray[randomCorner];
+    // Find the empty boards and fill it with something
+    NSMutableArray *boardState = [[NSMutableArray alloc] initWithObjects:self.labelOne, self.labelTwo, self.labelThree, self.labelFour, self.labelFive, self.labelSix, self.labelSeven, self.labelEight, self.labelNine, nil];
+    NSMutableArray *availableMoves = [[NSMutableArray alloc] init];
 
-    if (![labelChosen.text isEqual:@"X"]||![labelChosen.text isEqual:@"O"]) // if it's empty then fill it with computer move
+    for (int i = 0; i < 9; i++)
     {
-        labelChosen.text = @"X";
-        labelChosen.textColor = [UIColor blueColor];
-        [self switchLabelToNextPlayer];
-        [self playerMakeMove];
+        if ([[boardState[i] text] isEqual: @""])
+        {
+            [availableMoves addObject:[boardState objectAtIndex:i]];
+        }
     }
+
+    UILabel *randomEmptyLabel = [availableMoves objectAtIndex: arc4random() % [availableMoves count]];
+    randomEmptyLabel.text = @"X";
+    randomEmptyLabel.textColor = [UIColor blueColor];
+    [self playerMakeMove];
+
 }
 
 - (void)playerMakeMove
 {
     NSLog(@"player next move is called!");
-}
+    [self countdownTimer];
 
+}
 
 //- (void) switchToComputer
 //{
